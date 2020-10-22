@@ -1,0 +1,62 @@
+server:
+  port: 8801
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://registry:8800/eureka/
+spring:
+  cloud:
+    gateway:
+      locator:
+        enabled: true
+      #default-filters:
+      #- AddResponseHeader=X-Response-Default-Foo, Default-Bar
+      routes:
+        # =====================================
+        - id: MAGIC-CONFIGSERVER
+          uri: http://configserver:8700
+            #live: 8879
+          predicates:
+            - Path=/CONFIGSERVER/**
+          filters:
+            - StripPrefix=1
+        - id: MAGIC-LIVE
+          uri: http://live:8802
+          #live: 8802
+          predicates:
+            - Path=/MAGIC-LIVE/**
+          filters:
+            - StripPrefix=1
+        - id: MAGIC-VIPMEMBER
+          uri: http://vipmember:8803
+          predicates:
+            - Path=/MAGIC-VIPMEMBER/**
+          filters:
+            - StripPrefix=1
+        - id: MAGIC-APPVERSION
+          uri: http://appversion:8804
+          predicates:
+            - Path=/APPVERSION/**
+          filters:
+            - StripPrefix=1
+        - id: MAGIC-PRODUCT
+          uri: http://product:8805
+          #product: 8805
+          predicates:
+            - Path=/MAGIC-PRODUCT/**
+          filters:
+            - StripPrefix=1
+        - id: MAGIC-TECHDATA
+          uri: http://techdata:8806
+          #product: 8806
+          predicates:
+            - Path=/MAGIC-TEHDATA/**
+          filters:
+            - StripPrefix=1
+        - id: MAGIC-PAYMENT
+          uri: http://payment:8807
+          #product: 880
+          predicates:
+            - Path=/MAGIC-PAYMENT/**
+          filters:
+            - StripPrefix=1

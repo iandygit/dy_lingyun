@@ -1,0 +1,24 @@
+server:
+  debug:
+    port: 87611
+  port: 8800
+debug:
+  opts: -Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=y,address=${server.debug.port},suspend=n
+eureka:
+  client:
+    fetchRegistry: false
+    registerWithEureka: false
+    serviceUrl:
+      defaultZone: http://registry:8800/eureka/
+  environment: dev
+  eviction-interval-timer-in-ms: 5000
+  host: localhost
+  instance:
+    instanceId: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+    preferIpAddress: true
+    lease-renewal-interval-in-seconds: 5      # 心跳时间，即服务续约间隔时间（缺省为30s）
+    lease-expiration-duration-in-seconds: 10  # 发呆时间，即服务续约到期时间（缺省为90s）
+  port: 8800
+  server:
+    enable-self-preservation: true #服务端开启自我保护模式。无论什么情况，服务端都会保持一定数量的服务。避免client与server的网络问题，而出现大量的服务被清除。
+    peer-node-read-timeout-ms: 200

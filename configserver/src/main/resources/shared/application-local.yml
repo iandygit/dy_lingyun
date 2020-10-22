@@ -1,0 +1,146 @@
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    plateform:
+      url: jdbc:mysql://127.0.0.1:3306/magic_plateform?useUnicode=true&characterEncoding=utf8&autoReconnect=true
+      username: root
+      password: 123456abc
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      # mybatis下面为连接池的补充设置，应用到上面所有数据源中
+      # 初始化大小，最小，最大
+      initialSize: 1
+      minIdle: 3
+      maxActive: 20
+      #配置获取连接等待超时的时间
+      maxWait: 60000
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 30000
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,slf4j
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      # 合并多个DruidDataSource的监控数据
+      useGlobalDataSourceStat: true
+    techdata:
+      url: jdbc:mysql://127.0.0.1:3306/magic_material?useUnicode=true&characterEncoding=utf8&autoReconnect=true
+      username: root
+      password: 123456abc
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      # mybatis下面为连接池的补充设置，应用到上面所有数据源中
+      # 初始化大小，最小，最大
+      initialSize: 1
+      minIdle: 3
+      maxActive: 20
+      #配置获取连接等待超时的时间
+      maxWait: 60000
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 30000
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,slf4j
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      # 合并多个DruidDataSource的监控数据
+      useGlobalDataSourceStat: true
+    vipmember:
+      url: jdbc:mysql://127.0.0.1:3306/magic?useUnicode=true&characterEncoding=utf8&autoReconnect=true
+      username: root
+      password: 123456abc
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      # mybatis下面为连接池的补充设置，应用到上面所有数据源中
+      # 初始化大小，最小，最大
+      initialSize: 1
+      minIdle: 3
+      maxActive: 20
+      #配置获取连接等待超时的时间
+      maxWait: 60000
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 30000
+      validationQuery: select 'x'
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,slf4j
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      # 合并多个DruidDataSource的监控数据
+      useGlobalDataSourceStat: true
+
+      #    mongodb:
+      #端口27017
+      #      host: 39.97.191.1
+      #      port: 27017
+      #      database: ehsy
+      #      username: magic
+      #      password: magic85769366903
+      #elasticsearch配置
+  data:
+    elasticsearch:
+      cluster-name: docker-cluster
+      cluster-nodes: 106.13.187.194:9300
+      index-name: javashop
+  redis:
+    database: 1
+    host: 123.57.160.227
+    port: 6379
+    password:
+    lettuce:
+      shutdown-timeout: 100
+      pool:
+        max-active: 8
+        max-wait: 3
+        max-idle: 8
+        min-idle: 0
+    timeout: 8000
+  rabbitmq:
+    host: 106.13.187.194
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /javashop_host
+feign:
+  client:
+  config:
+    feignName: myServiceName
+    connectTimeout: 5000
+    readTimeout: 5000
+    loggerLevel: full
+#  security:
+#    basic:
+#      path: /swagger-ui.html,/v2/api-docs # 拦截的路径
+#    user:
+#      name: wkk # 配置用户名
+#      password: abc123  #密码

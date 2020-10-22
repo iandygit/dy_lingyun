@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: configserver
+      profile: local
+      label: master
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8800/eureka/

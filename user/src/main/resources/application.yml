@@ -1,0 +1,11 @@
+server:
+  port: 8803
+spring:
+  application:
+    name: api-member
+  aop:
+    auto: true # 启动aop配置
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

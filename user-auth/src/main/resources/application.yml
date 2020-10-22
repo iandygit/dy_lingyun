@@ -1,0 +1,14 @@
+server:
+  port: 8804
+spring:
+  application:
+    name: authserver
+  aop:
+    auto: true # 启动aop配置
+
+# actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

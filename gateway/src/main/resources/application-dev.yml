@@ -1,0 +1,76 @@
+server:
+  port: 8801
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://registry:8800/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: magic-gateway:8801
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        #- SwaggerHeaderFilter
+      discovery:
+        locator:
+          enabled: true
+      #default-filters:
+      #- AddResponseHeader=X-Response-Default-Foo, Default-Bar
+      routes:
+        - id: 配置中心
+          uri: lib://CONFIGSERVER
+          predicates:
+            - Path=/CONFIGSERVER/**,
+          filters:
+            - StripPrefix=1
+        - id: 用户中心
+          uri: lib://API-MEMBER
+          predicates:
+            - Path=/API-MEMBER/**
+          filters:
+            - StripPrefix=1
+            - name: Hystrix
+              args:
+                name: fallback
+                fallbackUri: forward:/fallback/hystrixTimeout
+            - AddRequestHeader=charset,utf-8
+            - AddResponseHeader=content-type,charset=utf-8
+        - id: 授权中心
+          uri: lib://AUTHSERVER
+          predicates:
+            - Path=/AUTHSERVER/**
+          filters:
+            - StripPrefix=1
+            - name: Hystrix
+              args:
+                name: fallback
+                fallbackUri: forward:/fallback/hystrixTimeout
+        - id: 磅单中心
+          uri: lib://API-POUND
+          predicates:
+            - Path=/API-POUND/**
+          filters:
+            - StripPrefix=1
+            - name: Hystrix
+              args:
+                name: fallback
+                fallbackUri: forward:/fallback/hystrixTimeout
+            - AddRequestHeader=charset,utf-8
+            - AddResponseHeader=content-type,charset=utf-8
+    globalcors:
+      cors-configurations:
+        '[/**]':
+          allowedOrigins: "*"
+          allowedMethods: "*"
+
+logging:
+  level:
+    org.springframework.cloud.gateway: ERROR
+    org.springframework.http.server.reactive: ERROR
+    org.springframework.web.reactive: ERROR
+    reactor.ipc.netty: ERROR
+feign:
+  hystrix:
+    enabled: true
+

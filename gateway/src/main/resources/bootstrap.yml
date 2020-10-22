@@ -1,0 +1,8 @@
+spring:
+    application:
+        name: lingyun-gateway
+    profiles:
+        active: dev
+    cloud:
+        config:
+            enabled: false
