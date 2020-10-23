@@ -47,7 +47,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
         String url = request.getURI().getPath();
 
         logger.info("开始权限过滤......."+url);
-        String uuid = request.getHeaders().getFirst("uuid");
+        /*String uuid = request.getHeaders().getFirst("uuid");
         if(url.contains("/API-POUND/pound")){
             logger.info("开始验证api keys......."+uuid);
            Object value=redisTemplate.opsForHash().get("APIKEYS",uuid);
@@ -58,7 +58,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
            }else {
                return chain.filter(exchange);
            }
-        }
+        }*/
         //跳过不需要验证的路径
         if(null != skipAuthUrls&& Arrays.asList(skipAuthUrls).contains(url)){
             return chain.filter(exchange);
