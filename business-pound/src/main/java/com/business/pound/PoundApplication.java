@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableDiscoveryClient
 @EnableEurekaClient
 public class PoundApplication {
+
     public static void main(String args[]){
 
         SpringApplication.run(PoundApplication.class);

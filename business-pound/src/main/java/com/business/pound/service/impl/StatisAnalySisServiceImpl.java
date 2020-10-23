@@ -1,17 +1,21 @@
 package com.business.pound.service.impl;
 
-import com.business.pound.entity.PoundEntity;
+import com.alibaba.fastjson.JSONArray;
 import com.business.pound.repository.PoundRepository;
 import com.business.pound.service.StatisAnalySisService;
+import com.business.pound.vo.StatisAnalySIsB;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class StatisAnalySisServiceImpl implements StatisAnalySisService {
+
+    Logger logger= LoggerFactory.getLogger(StatisAnalySisServiceImpl.class);
     @Autowired
     private PoundRepository poundRepository;
 
@@ -27,5 +31,29 @@ public class StatisAnalySisServiceImpl implements StatisAnalySisService {
         }
 
         return mapList;
+    }
+
+    @Override
+    public JSONArray getDeliverUnitAnalysis(String poundNum) {
+
+         List<StatisAnalySIsB> objects=poundRepository.findAllByPoundNumDeDeUnit(poundNum);
+
+
+          JSONArray jsonArray=new JSONArray();
+          jsonArray.addAll(objects);
+
+        return jsonArray;
+    }
+
+    @Override
+    public JSONArray getReciveUnitAnalysis(String poundNum) {
+
+        List<StatisAnalySIsB> objects=poundRepository.findAllByPoundNumRecUnit(poundNum);
+        JSONArray jsonArray=new JSONArray();
+        jsonArray.addAll(objects);
+
+
+
+        return jsonArray;
     }
 }

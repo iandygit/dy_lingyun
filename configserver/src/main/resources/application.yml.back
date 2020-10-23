@@ -3,13 +3,14 @@ server:
 spring:
   application:
     name: configserver
-  profiles:
-    active: native
   cloud:
     config:
       server:
-        native:
-          search-locations: classpath:/shared
+        git:
+          uri: https://code.aliyun.com/51gkp-api-1/b2b2c-config.git
+          search-paths: config-repo
+          username: zhangbo_magic
+          password: magic1028
 eureka:
   instance:
     prefer-ip-address: true

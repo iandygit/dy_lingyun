@@ -50,4 +50,8 @@ public class PoundServiceImpl  implements PoundService {
     }
 
 
+    @Override
+    public List<PoundEntity> findAllByPoundNum(String poundNum) {
+        return poundRepository.findAllByPoundNum(poundNum);
+    }
 }

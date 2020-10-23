@@ -76,23 +76,36 @@ public class UserServiceImpl implements UserService {
             jsonObject.put("status",5000);
             jsonObject.put("menu","");
             jsonObject.put("msg","用户名不存在");
-            return ResponseEntity.ok(jsonObject);
+
         }else {
-            jsonObject.put("status",2000);
+
             String pwd=userEntity.getPassWord();
             if(pwd.equals(password)){//验证通过
                 Long roleId=userEntity.getRoleId();
                 List<MenuEntity> roleAuthEntities=roleAuthRepository.findAllMenuByRoleId(roleId);
-                logger.info("权限id"+roleAuthEntities);
-                jsonObject.put("menu",roleAuthEntities);
-                return ResponseEntity.ok(jsonObject);
+                if(null!=roleAuthEntities &&roleAuthEntities.size()>0){
+                    jsonObject.put("status",2000);
+                    logger.info("权限id"+roleAuthEntities);
+                    jsonObject.put("usreid",userEntity.getId());
+                    jsonObject.put("msg","有权限，验证通过");
+                    jsonObject.put("menu",roleAuthEntities);
+
+                }else {
+                    jsonObject.put("status",2001);
+                    jsonObject.put("menu",null);
+                    jsonObject.put("msg","没有分配菜单权限");
+
+                }
+
             }else {
                 jsonObject.put("status",5001);
                 jsonObject.put("menu","");
                 jsonObject.put("msg","密码不正确");
-                return ResponseEntity.ok(jsonObject);
+
             }
+
         }
+        return ResponseEntity.ok(jsonObject);
     }
 
     @Override
@@ -135,7 +148,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity getOne(Long id) {
         Optional<UserEntity> userEntity=userRepository.findById(id);
-
+        if(null==userEntity){
+            return null;
+        }
 
         return userEntity.get();
     }

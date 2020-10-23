@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MenuServiceImpl implements MenuService {
@@ -21,6 +22,14 @@ public class MenuServiceImpl implements MenuService {
 
 
         return menuRepository.findAll();
+    }
+
+    @Override
+    public List<MenuEntity> findAllByRoleId(Long roleId) {
+
+
+
+        return menuRepository.findAllByRoleId(roleId);
     }
 
     @Override
@@ -46,7 +55,11 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public MenuEntity getOne(Long id) {
-        return menuRepository.getOne(id);
+        Optional<MenuEntity> menuEntity=menuRepository.findById(id);
+        if(null==menuEntity){
+            return null;
+        }
+        return menuEntity.get();
     }
 
     @Override

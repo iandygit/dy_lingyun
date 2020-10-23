@@ -8,6 +8,7 @@ import com.business.pound.util.ExcelUtil;
 import com.business.pound.vo.PoundTransVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,15 @@ public class ExportController {
     @GetMapping("pound")
     @ApiOperation(value = "磅单记录导出",tags = "导出管理")
     public ResponseEntity<String>  exportPound(String poundNum,  HttpServletResponse response){
-        List<PoundEntity> poundEntities= poundService.getAll();
+        List<PoundEntity> poundEntities=null;
+        if(StringUtils.isEmpty(poundNum)){
+             poundEntities= poundService.getAll();
+        }else {
+
+            poundEntities=poundService.findAllByPoundNum(poundNum);
+        }
+
+
 
         String cloumns[]=new String []{"磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","磅房号"};
 
@@ -74,7 +83,7 @@ public class ExportController {
     @ApiOperation(value = "运单记录导出",tags = "导出管理")
     public ResponseEntity<String>  exportTransport(String poundNum,  HttpServletResponse response){
 
-         List<PoundTransVo> transportEnetity= transportService.findAllList();
+         List<PoundTransVo> transportEnetity= transportService.findAllList(poundNum);
          String cloumns[]=new String []{"运单号","磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","磅房号"};
 
         List list=new ArrayList();

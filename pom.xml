@@ -15,7 +15,6 @@
         <module>user</module>
         <module>lingyun-coree</module>
         <module>user-auth</module>
-        <module>faced</module>
         <module>business-pound</module>
     </modules>
 

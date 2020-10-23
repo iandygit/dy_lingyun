@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class RoleServiceImpl implements RoleService {
 
@@ -45,7 +47,11 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleEntity getOne(Long id) {
-        return roleRepository.getOne(id);
+        Optional<RoleEntity> roleEntity=roleRepository.findById(id);
+        if(null==roleEntity){
+            return null;
+        }
+        return roleEntity.get();
     }
 
     @Override
