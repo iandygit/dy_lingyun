@@ -32,14 +32,14 @@ public class StatisAnalysisController {
     @ApiOperation(value = "货物流动总重量",tags = "统计分析管理")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "day",value = "统计天数",dataType = "int"),
-            @ApiImplicitParam(name = "poundNum",value = "磅房号",dataType = "string")
+            @ApiImplicitParam(name = "poundAccount",value = "磅房号",dataType = "string")
     })
-    public ResponseEntity<JSONObject>  geteWeightAnalysis(Integer day, String poundNum){
+    public ResponseEntity<JSONObject>  geteWeightAnalysis(Integer day, String poundAccount){
         JSONObject jsonObject=new JSONObject();
         if(day==null){
             day=7;
         }
-        List<Object[]> mapList=statisAnalySisService.getWeightAnalySis(day,poundNum);
+        List<Object[]> mapList=statisAnalySisService.getWeightAnalySis(day,poundAccount);
         if(null==mapList ||mapList.size()==0){
 
             return ResponseEntity.ok(null);
@@ -61,11 +61,11 @@ public class StatisAnalysisController {
             @ApiResponse(code = 401, message = "权限不足") })
     @ApiOperation(value = "货物发货公司占比统计分析图",tags = "统计分析管理")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "poundNum",value = "磅房号",dataType = "string")
+            @ApiImplicitParam(name = "poundAccount",value = "磅房号",dataType = "string")
     })
-    public ResponseEntity<JSONArray> getDelivUnitAnalysis(String poundNum){
+    public ResponseEntity<JSONArray> getDelivUnitAnalysis(String poundAccount){
 
-        JSONArray jsonArray= statisAnalySisService.getDeliverUnitAnalysis(poundNum);
+        JSONArray jsonArray= statisAnalySisService.getDeliverUnitAnalysis(poundAccount);
 
 
         return  ResponseEntity.ok(jsonArray);
@@ -77,11 +77,11 @@ public class StatisAnalysisController {
             @ApiResponse(code = 401, message = "权限不足") })
     @ApiOperation(value = "货物收货公司占比统计分析图",tags = "统计分析管理")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "poundNum",value = "磅房号",dataType = "string")
+            @ApiImplicitParam(name = "poundAccount",value = "磅房号",dataType = "string")
     })
-    public ResponseEntity<JSONArray> getRecUnitAnalysis(String poundNum){
+    public ResponseEntity<JSONArray> getRecUnitAnalysis(String poundAccount){
 
-        JSONArray jsonArray=statisAnalySisService.getReciveUnitAnalysis(poundNum);
+        JSONArray jsonArray=statisAnalySisService.getReciveUnitAnalysis(poundAccount);
 
         return  ResponseEntity.ok(jsonArray);
     }

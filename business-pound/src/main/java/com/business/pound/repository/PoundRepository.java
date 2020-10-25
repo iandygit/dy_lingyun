@@ -12,27 +12,61 @@ import java.util.List;
 public interface PoundRepository extends JpaRepository<PoundEntity,Long> {
 
 
-    @Query(value = "select sum(p.actual_weight) weight,p.pound_account from t_pound p   where DATE_FORMAT(p.create_time,'%Y-%m-%d') >= DATE_SUB( CURDATE( ), INTERVAL 7 day ) and (:poundNum is null or p.pound_account=:poundNum) group by p.pound_account",nativeQuery = true)
-    public List<Object[]> findAllByPoundNumDay7( @Param("poundNum")String poundNum);
+    @Query(value = "select sum(p.actual_weight) weight,p.pound_account from t_pound p   where DATE_FORMAT(p.create_time,'%Y-%m-%d') >= DATE_SUB( CURDATE( ), INTERVAL 7 day ) and (:poundAccount is null or p.pound_account=:poundAccount) group by p.pound_account",nativeQuery = true)
+    public List<Object[]> findAllByPoundNumDay7( @Param("poundAccount")String poundAccount);
 
-    @Query(value = "select   sum(p.actual_weight) weight,p.pound_account from t_pound p   where DATE_FORMAT(p.create_time,'%Y-%m-%d') >= DATE_SUB( CURDATE( ), INTERVAL 30  day ) and (:poundNum is null or p.pound_account=:poundNum) group by p.pound_account",nativeQuery = true)
-    public List<Object[]> findAllByPoundNumDay30( @Param("poundNum")String poundNum);
+    @Query(value = "select   sum(p.actual_weight) weight,p.pound_account from t_pound p   where DATE_FORMAT(p.create_time,'%Y-%m-%d') >= DATE_SUB( CURDATE( ), INTERVAL 30  day ) and (:poundAccount is null or p.pound_account=:poundAccount) group by p.pound_account",nativeQuery = true)
+    public List<Object[]> findAllByPoundNumDay30( @Param("poundAccount")String poundAccount);
 
-    //@Query(value = "select   new  com.business.pound.vo.StatisAnalySIsB(p.deliverUnit,count(p.deliverUnit)/(select count(1)" +
-    //        " from PoundEntity where deliverUnit is not null and (:poundNum is null or p.poundNum=:poundNum))) " +
-    //        "from PoundEntity p where  (:poundNum is null or p.poundNum=:poundNum) group by p.deliverUnit")
-    //public List<StatisAnalySIsB> findAllByPoundNumDeDeUnit(@Param("poundNum")String poundNum);
+
 
     @Query(value = "select   new  com.business.pound.vo.StatisAnalySIsB(p.deliverUnit,count(p.deliverUnit),(select count(1)  " +
             " from PoundEntity where deliverUnit is not null and (:poundNum is null or poundNum=:poundNum)) as vo) " +
             "from PoundEntity p where  (:poundNum is null or p.poundNum=:poundNum) group by p.deliverUnit")
     public List<StatisAnalySIsB> findAllByPoundNumDeDeUnit(@Param("poundNum")String poundNum);
 
+
+    /**
+     * 通过磅房号获取发货公司占比统计结果
+     * @param poundAccount
+     * @return
+     */
+    @Query(value = "select   new  com.business.pound.vo.StatisAnalySIsB(p.deliverUnit,count(p.deliverUnit),(select count(1)  " +
+            " from PoundEntity where deliverUnit is not null and (:poundAccount is null or poundAccount=:poundAccount)) as vo) " +
+            "from PoundEntity p where  (:poundAccount is null or p.poundAccount=:poundAccount) group by p.deliverUnit")
+    public List<StatisAnalySIsB> findAllByPoundAccDeDeUnit(@Param("poundAccount")String poundAccount);
+
+    /**
+     * 通过磅单号获取收货公司占比统计结果
+     * @param poundNum
+     * @return
+     */
     @Query(value = "select   new  com.business.pound.vo.StatisAnalySIsB(p.reciveUnit,count(p.reciveUnit),(select count(1) as total " +
             "from PoundEntity where reciveUnit is not null and  (:poundNum is null or poundNum=:poundNum)) )" +
             " from PoundEntity p where  (:poundNum is null or p.poundNum=:poundNum) group by p.reciveUnit")
     public List<StatisAnalySIsB> findAllByPoundNumRecUnit(@Param("poundNum")String poundNum);
 
+    /**
+     * 通过磅房号获收货公司占比统计结果
+     * @param poundAccount
+     * @return
+     */
+    @Query(value = "select   new  com.business.pound.vo.StatisAnalySIsB(p.reciveUnit,count(p.reciveUnit),(select count(1) as total " +
+            "from PoundEntity where reciveUnit is not null and  (:poundAccount is null or poundAccount=:poundAccount)) )" +
+            " from PoundEntity p where  (:poundAccount is null or p.poundAccount=:poundAccount) group by p.reciveUnit")
+    public List<StatisAnalySIsB> findAllByPoundAccRecUnit(@Param("poundAccount")String poundAccount);
 
+    /**
+     * 通过磅单号查询实体
+     * @param poundName
+     * @return
+     */
     public List<PoundEntity> findAllByPoundNum(String poundName);
+
+    /***
+     * 通过磅房号查询实体
+     * @param poundAccount
+     * @return
+     */
+    public List<PoundEntity> findAllByPoundAccount(String poundAccount);
 }

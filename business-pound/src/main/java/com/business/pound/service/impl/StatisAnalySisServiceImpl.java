@@ -20,12 +20,12 @@ public class StatisAnalySisServiceImpl implements StatisAnalySisService {
     private PoundRepository poundRepository;
 
     @Override
-    public List<Object[]> getWeightAnalySis(Integer day, String poundNum) {
+    public List<Object[]> getWeightAnalySis(Integer day, String poundAccount) {
         List<Object[]> mapList=new ArrayList<Object[]>();
         if(day==7){
-            mapList=poundRepository.findAllByPoundNumDay7(poundNum);
+            mapList=poundRepository.findAllByPoundNumDay7(poundAccount);
         }else if(day==30){
-            mapList=poundRepository.findAllByPoundNumDay30(poundNum);
+            mapList=poundRepository.findAllByPoundNumDay30(poundAccount);
         }else {
             return null;
         }
@@ -34,9 +34,9 @@ public class StatisAnalySisServiceImpl implements StatisAnalySisService {
     }
 
     @Override
-    public JSONArray getDeliverUnitAnalysis(String poundNum) {
+    public JSONArray getDeliverUnitAnalysis(String poundAccount) {
 
-         List<StatisAnalySIsB> objects=poundRepository.findAllByPoundNumDeDeUnit(poundNum);
+         List<StatisAnalySIsB> objects=poundRepository.findAllByPoundAccDeDeUnit(poundAccount);
 
 
           JSONArray jsonArray=new JSONArray();
@@ -46,9 +46,9 @@ public class StatisAnalySisServiceImpl implements StatisAnalySisService {
     }
 
     @Override
-    public JSONArray getReciveUnitAnalysis(String poundNum) {
+    public JSONArray getReciveUnitAnalysis(String poundAccount) {
 
-        List<StatisAnalySIsB> objects=poundRepository.findAllByPoundNumRecUnit(poundNum);
+        List<StatisAnalySIsB> objects=poundRepository.findAllByPoundAccRecUnit(poundAccount);
         JSONArray jsonArray=new JSONArray();
         jsonArray.addAll(objects);
 

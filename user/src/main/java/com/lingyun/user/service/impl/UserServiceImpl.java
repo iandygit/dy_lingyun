@@ -1,16 +1,15 @@
 package com.lingyun.user.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonObject;
 import com.lingyun.user.dao.RoleAuthRepository;
 import com.lingyun.user.dao.RoleRepository;
 import com.lingyun.user.dao.UserRepository;
 import com.lingyun.user.entity.MenuEntity;
-import com.lingyun.user.entity.RoleAuthEntity;
 import com.lingyun.user.entity.UserEntity;
 import com.lingyun.user.service.UserService;
 import com.lingyun.user.vo.UserVo;
+
+import com.lingyun.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -71,7 +69,7 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity=userRepository.findByUserName(username);
         JSONObject jsonObject=new JSONObject();
 
-
+       String pwdmd5="";
         if(null==userEntity){
             jsonObject.put("status",5000);
             jsonObject.put("menu","");
@@ -80,7 +78,8 @@ public class UserServiceImpl implements UserService {
         }else {
 
             String pwd=userEntity.getPassWord();
-            if(pwd.equals(password)){//验证通过
+            pwdmd5 = StringUtil.md5(password+ userEntity.getUserName().toLowerCase());
+            if(pwd.equals(pwdmd5)){//验证通过
                 Long roleId=userEntity.getRoleId();
                 List<MenuEntity> roleAuthEntities=roleAuthRepository.findAllMenuByRoleId(roleId);
                 if(null!=roleAuthEntities &&roleAuthEntities.size()>0){
@@ -127,6 +126,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity save(UserEntity userEntity) {
+        String pwdmd5 = StringUtil.md5(userEntity.getPassWord()+ userEntity.getUserName().toLowerCase());
+        userEntity.setPassWord(pwdmd5);
         return  userRepository.saveAndFlush(userEntity);
     }
 

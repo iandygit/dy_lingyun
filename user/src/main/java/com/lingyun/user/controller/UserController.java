@@ -78,12 +78,25 @@ public class UserController {
         logger.info("结束添加用户");
         return ResponseEntity.ok("操作失败");
     }
-    @RequestMapping(value = "/name",method = RequestMethod.GET)
+    @RequestMapping(value = "/{userName}",method = RequestMethod.GET)
     @ApiOperation(value = "查找用户", notes = "通过用户名查找用户", tags = "用户管理")
-    public ResponseEntity<UserEntity> findByName(String username){
+    public ResponseEntity<UserEntity> findByName(@PathVariable("userName") String userName){
+        logger.info("这里是用户中心,获取userName: "+userName);
+        UserEntity userEntity=userService.findOneByName(userName);
+        return ResponseEntity.ok(userEntity);
+    }
+
+    @RequestMapping(value = "/name",method = RequestMethod.GET)
+    @ApiOperation(value = "验证用户是否存在", notes = "通过用户名查找用户", tags = "用户管理")
+    public ResponseEntity<String> checkUserName(String username){
         logger.info("这里是用户中心,获取userName: "+username);
         UserEntity userEntity=userService.findOneByName(username);
-        return ResponseEntity.ok(userEntity);
+
+        if(null==userEntity ){
+            ResponseEntity.ok("true");
+
+        }
+        return ResponseEntity.ok("false");
     }
     @RequestMapping(value = "/one/{userId}",method = RequestMethod.GET)
     @ApiOperation(value = "通过id查找用户", notes = "通过id查找用户", tags = "用户管理")

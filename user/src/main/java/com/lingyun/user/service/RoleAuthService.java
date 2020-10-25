@@ -10,4 +10,12 @@ public interface RoleAuthService extends BaseService<RoleAuthEntity> {
 
 
     public String savRoleAuth(String roleId,String menuIds);
+
+    /**
+     * g根据角色id和菜单id删除关联关系
+     * @param roleId
+     * @param menuId
+     * @return
+     */
+    public int deleteByRoleIdAndMenuId(Long roleId,Long menuId);
 }

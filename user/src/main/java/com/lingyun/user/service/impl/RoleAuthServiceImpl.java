@@ -4,6 +4,8 @@ import com.lingyun.user.dao.RoleAuthRepository;
 import com.lingyun.user.entity.MenuEntity;
 import com.lingyun.user.entity.RoleAuthEntity;
 import com.lingyun.user.service.RoleAuthService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,7 @@ import java.util.Optional;
 
 @Service
 public class RoleAuthServiceImpl implements RoleAuthService {
+    Logger logger= LoggerFactory.getLogger(RoleAuthServiceImpl.class);
     @Autowired
     private RoleAuthRepository roleAuthRepository;
 
@@ -70,5 +73,19 @@ public class RoleAuthServiceImpl implements RoleAuthService {
             roleAuthRepository.save(roleAuthEntity);
         }
         return "操作成功";
+    }
+
+    @Override
+    public int deleteByRoleIdAndMenuId(Long roleId, Long menuId) {
+
+         try {
+             roleAuthRepository.deleteAllByRoleIdAndMenuId(roleId,menuId);
+
+             return 1;
+         }catch (Exception e){
+             logger.error("删除角色菜单关联关系失败"+e.getMessage());
+             return 0;
+         }
+
     }
 }

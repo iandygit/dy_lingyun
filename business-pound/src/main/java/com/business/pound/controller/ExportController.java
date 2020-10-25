@@ -34,18 +34,18 @@ public class ExportController {
 
     @GetMapping("pound")
     @ApiOperation(value = "磅单记录导出",tags = "导出管理")
-    public ResponseEntity<String>  exportPound(String poundNum,  HttpServletResponse response){
+    public ResponseEntity<String>  exportPound(String poundAccount,  HttpServletResponse response){
         List<PoundEntity> poundEntities=null;
-        if(StringUtils.isEmpty(poundNum)){
+        if(StringUtils.isEmpty(poundAccount)){
              poundEntities= poundService.getAll();
         }else {
 
-            poundEntities=poundService.findAllByPoundNum(poundNum);
+            poundEntities=poundService.findAllByPoundAccount(poundAccount);
         }
 
 
 
-        String cloumns[]=new String []{"磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","磅房号"};
+        String cloumns[]=new String []{"磅房号","磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","磅房号"};
 
 
 
@@ -55,18 +55,19 @@ public class ExportController {
         for(int i=0 ;i<poundEntities.size();i++){
 
             PoundEntity poundEntity=  poundEntities.get(i);
-            String result[]=new String[10];
+            String result[]=new String[cloumns.length];
 
-            result[0]=poundEntity.getPoundNum();//磅单号
-            result[1]=poundEntity.getCarNum();//汽车号
-            result[2]=poundEntity.getGoodsName();//货物名
-            result[3]=poundEntity.getReciveUnit();//收货单位
-            result[4]=poundEntity.getDeliverUnit();//发货单位
-            result[5]=String.valueOf(poundEntity.getWeight());//毛重
-            result[6]=String.valueOf(poundEntity.getTareWeight());//皮重
-            result[7]=String.valueOf(poundEntity.getNetWeight());//净重
-            result[8]=poundEntity.getFlowTo().getDesc();//货物流向
-            result[9]=poundEntity.getPoundAccount();//磅房号
+            result[0]=poundEntity.getPoundAccount();//磅房号
+            result[1]=poundEntity.getPoundNum();//磅房号
+            result[2]=poundEntity.getCarNum();//汽车号
+            result[3]=poundEntity.getGoodsName();//货物名
+            result[4]=poundEntity.getReciveUnit();//收货单位
+            result[5]=poundEntity.getDeliverUnit();//发货单位
+            result[6]=String.valueOf(poundEntity.getWeight());//毛重
+            result[7]=String.valueOf(poundEntity.getTareWeight());//皮重
+            result[8]=String.valueOf(poundEntity.getNetWeight());//净重
+            result[9]=poundEntity.getFlowTo().getDesc();//货物流向
+            result[10]=poundEntity.getPoundAccount();//磅房号
             list.add(result);
         }
 
@@ -81,9 +82,9 @@ public class ExportController {
     }
     @GetMapping("transport")
     @ApiOperation(value = "运单记录导出",tags = "导出管理")
-    public ResponseEntity<String>  exportTransport(String poundNum,  HttpServletResponse response){
+    public ResponseEntity<String>  exportTransport(String poundAccount,  HttpServletResponse response){
 
-         List<PoundTransVo> transportEnetity= transportService.findAllList(poundNum);
+         List<PoundTransVo> transportEnetity= transportService.findAllList(poundAccount);
          String cloumns[]=new String []{"运单号","磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","磅房号"};
 
         List list=new ArrayList();
@@ -92,7 +93,7 @@ public class ExportController {
         for(int i=0 ;i<transportEnetity.size();i++){
 
             PoundTransVo poundEntity=  transportEnetity.get(i);
-            String result[]=new String[11];
+            String result[]=new String[cloumns.length];
             result[0]=poundEntity.getTransportNum();//运单号
             result[1]=poundEntity.getPoundNum();//磅单号
             result[2]=poundEntity.getCarNum();//汽车号

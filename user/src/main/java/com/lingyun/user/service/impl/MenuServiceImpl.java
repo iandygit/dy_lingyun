@@ -32,6 +32,7 @@ public class MenuServiceImpl implements MenuService {
         return menuRepository.findAllByRoleId(roleId);
     }
 
+
     @Override
     public MenuEntity save(MenuEntity menuEntity) {
 

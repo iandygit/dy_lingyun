@@ -47,6 +47,7 @@ public class RoleAuthController {
 
 
 
+
     @RequestMapping(value = "/",method = RequestMethod.GET)
     @ApiOperation(value = "通过角色id获得权限列表",tags = "权限管理")
     public ResponseEntity<JSONArray> getAllAuth(String roleid){
@@ -59,6 +60,18 @@ public class RoleAuthController {
         JSONArray jsonArray=new JSONArray();
         jsonArray.addAll(menuEntities);
         return  ResponseEntity.ok(jsonArray);
+    }
+
+
+    @RequestMapping(value = "/auth",method = RequestMethod.POST)
+    @ApiOperation(value = "删除关联权限",tags = "权限管理")
+    public ResponseEntity<JSONObject> deleteAuth(String roleid,String menuId){
+
+
+
+
+          return  null;
+
     }
 
 }

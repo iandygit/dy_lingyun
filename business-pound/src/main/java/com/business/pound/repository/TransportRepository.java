@@ -22,8 +22,8 @@ public interface TransportRepository  extends JpaRepository<TransportEnetity,Lon
     public Page<PoundTransVo>  findAllTransport(Pageable pageable);
 
     @Query(value = "select new  com.business.pound.vo.PoundTransVo(t.id,t.poundId,t.transportNum,t.poundNum,p.carNum,p.goodsName,p.reciveUnit,p.deliverUnit,p.weight," +
-            "p.tareWeight,p.netWeight,p.poundWeight,p.flowTo,p.poundAccount) from TransportEnetity t left join PoundEntity p on t.poundId=p.id where (:poundNum is null or p.poundNum=:poundNum)")
-    public List<PoundTransVo> findAllList(@Param("poundNum")String poundNum );
+            "p.tareWeight,p.netWeight,p.poundWeight,p.flowTo,t.poundAccount) from TransportEnetity t left join PoundEntity p on t.poundId=p.id where (:poundAccount is null or p.poundAccount=:poundAccount)")
+    public List<PoundTransVo> findAllList(@Param("poundAccount")String poundAccount );
 
 
 

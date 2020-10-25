@@ -25,7 +25,7 @@ public class PoundTransVo {
     @ApiModelProperty("磅单id")
     private Long poundId;
 
-    @ApiModelProperty("磅单号")
+    @ApiModelProperty("磅房号")
     private String poundNum;
 
     @ApiModelProperty("汽车号")
@@ -79,6 +79,8 @@ public class PoundTransVo {
         this.poundWeight=poundWeight;
         this.flowTo=flowTo;
         this.poundAccount=poundAccount;
+        this.poundNum=poundNum;
+
 
     }
 
