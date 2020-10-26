@@ -40,8 +40,10 @@ public class DepartmentController {
     @RequestMapping(value = "/",method = RequestMethod.GET)
     @ApiOperation(value = "部门数据列表带分页", notes = "支持按照部门名称检索", tags = "部门管理")
     public  ResponseEntity<Page<DepartmentEntity>> findAllPage(String depName,Integer pageNum,Integer pageSize){
-        if(null==pageNum){
+        if(null==pageNum|| pageNum==0){
             pageNum=0;
+        }else {
+            pageNum=pageNum-1;
         }
 
         if(null==pageSize){
