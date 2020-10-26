@@ -10,6 +10,5 @@ public interface DepartmentRepository  extends JpaRepository<DepartmentEntity,Lo
     @Override
     Page<DepartmentEntity> findAll(Pageable pageable);
 
-
      Page<DepartmentEntity> findAllByDepName(String depName, Pageable pageable);
 }

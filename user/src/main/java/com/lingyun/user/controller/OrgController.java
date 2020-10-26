@@ -31,7 +31,7 @@ public class OrgController {
      * @return
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    @ApiOperation(value = "矿区数据列表", notes = "支持按照名称查询", tags = "矿区管理")
+    @ApiOperation(value = "矿区数据列表带分页", notes = "支持按照名称查询", tags = "矿区管理")
     public ResponseEntity<Page<OrganizationEntity>> pageOrg( String  orgName, Integer pageNum,Integer pageSize) {
         if(null== pageNum || pageNum==0){
             pageNum=0;
