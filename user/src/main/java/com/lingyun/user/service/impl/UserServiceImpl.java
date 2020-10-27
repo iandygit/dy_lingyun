@@ -9,7 +9,7 @@ import com.lingyun.user.entity.UserEntity;
 import com.lingyun.user.service.UserService;
 import com.lingyun.user.vo.UserVo;
 
-import com.lingyun.util.StringUtil;
+import com.lingyun.user.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
