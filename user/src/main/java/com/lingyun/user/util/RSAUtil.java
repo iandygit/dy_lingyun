@@ -318,7 +318,7 @@ public class RSAUtil {
     }
 
     public static void main(String args[]) throws Exception {
-        byte[] b="uuid".getBytes();
+        byte[] b="sdfsfs".getBytes();
 
         byte[] result=RSAUtil.encryptByPublicKey(b);
         byte [] a=RSAUtil.decryptByPrivateKey(result);

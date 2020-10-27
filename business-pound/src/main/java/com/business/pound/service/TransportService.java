@@ -12,5 +12,5 @@ public interface TransportService  extends BaseService<TransportEnetity>{
     public Page<PoundTransVo> getPageTransport(String transportNum, Pageable pageable);
 
 
-    public List<PoundTransVo> findAllList(String poundNum);
+    public List<PoundTransVo> findAllList();
 }

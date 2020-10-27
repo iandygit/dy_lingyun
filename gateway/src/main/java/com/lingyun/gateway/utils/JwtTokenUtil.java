@@ -86,10 +86,6 @@ public class JwtTokenUtil {
 
 
     public static void main(String[] args) {
-
-        String uuid="mecl_ifuwfewfe2233";
-        //String d=uuid.substring(5);
-        System.out.println(uuid.substring(5));
         String jwt = JwtTokenUtil.createJWT("weiyibiaoshi", "aaaaaa", null);
         System.out.println(jwt);
         try {

@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class OrgSeviceImpl implements OrgSevice {
@@ -63,11 +62,8 @@ public class OrgSeviceImpl implements OrgSevice {
 
     @Override
     public OrganizationEntity getOne(Long id) {
-        Optional<OrganizationEntity> organizationEntityOptional=orgRepository.findById(id);
-        if(null==organizationEntityOptional){
-            return null;
-        }
-        return organizationEntityOptional.get();
+
+        return orgRepository.findById(id).get();
     }
 
     @Override

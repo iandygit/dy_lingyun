@@ -29,7 +29,7 @@ public class MenuEntity {
     private int displyOrder;
 
     @ApiModelProperty("菜单链接")
-    private String menuUrl;
+    private String menu_url;
     private int menuLevel;
 
     @ApiModelProperty("状态")

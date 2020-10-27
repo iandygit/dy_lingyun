@@ -28,7 +28,7 @@ public class DepartmentController {
 
 
     @RequestMapping(method = RequestMethod.GET)
-    @ApiOperation(value = "部门数据列表,不分页", notes = "部门管理", tags = "部门管理")
+    @ApiOperation(value = "部门数据列表", notes = "部门管理", tags = "部门管理")
     public  ResponseEntity<List<DepartmentEntity>> findAll(){
 
         List<DepartmentEntity> list= departmentService.findAll();
@@ -37,18 +37,10 @@ public class DepartmentController {
 
     }
 
-    @RequestMapping(value = "/",method = RequestMethod.GET)
-    @ApiOperation(value = "部门数据列表带分页", notes = "支持按照部门名称检索", tags = "部门管理")
-    public  ResponseEntity<Page<DepartmentEntity>> findAllPage(String depName,Integer pageNum,Integer pageSize){
-        if(null==pageNum|| pageNum==0){
-            pageNum=0;
-        }else {
-            pageNum=pageNum-1;
-        }
+    @RequestMapping(value = "/{depName}",method = RequestMethod.GET)
+    @ApiOperation(value = "部门数据列表分页", notes = "部门管理", tags = "部门管理")
+    public  ResponseEntity<Page<DepartmentEntity>> findAllPage(@PathVariable("depName")String depName,Integer pageNum,Integer pageSize){
 
-        if(null==pageSize){
-            pageSize=20;
-        }
         Pageable pageable=new PageRequest(pageNum,pageSize);
         Page<DepartmentEntity> list= departmentService.findPageByDepName(depName,pageable);
 
@@ -56,7 +48,7 @@ public class DepartmentController {
 
     }
     @RequestMapping(value = "/one/{id}",method = RequestMethod.GET)
-    @ApiOperation(value = "通过id获取部门对象", notes = "查找部门实体", tags = "部门管理")
+    @ApiOperation(value = "部门数据列表分页", notes = "部门管理", tags = "部门管理")
     public ResponseEntity<DepartmentEntity> getOne(@PathVariable("id")String id){
 
         return ResponseEntity.ok(departmentService.getOne(Long.valueOf(id)));
@@ -64,7 +56,7 @@ public class DepartmentController {
     }
 
     @RequestMapping(value = "/{depName}",method = RequestMethod.POST)
-    @ApiOperation(value = "添加/编辑部门", notes = "添加编辑部门", tags = "部门管理")
+    @ApiOperation(value = "添加/编辑部门", notes = "部门管理", tags = "部门管理")
     public ResponseEntity<String> save(@PathVariable("depName")String depName,DepartmentEntity departmentEntity){
 
         departmentService.save(departmentEntity);

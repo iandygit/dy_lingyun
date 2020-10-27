@@ -1,15 +1,16 @@
 package com.lingyun.user.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonObject;
 import com.lingyun.user.dao.RoleAuthRepository;
 import com.lingyun.user.dao.RoleRepository;
 import com.lingyun.user.dao.UserRepository;
 import com.lingyun.user.entity.MenuEntity;
+import com.lingyun.user.entity.RoleAuthEntity;
 import com.lingyun.user.entity.UserEntity;
 import com.lingyun.user.service.UserService;
 import com.lingyun.user.vo.UserVo;
-
-import com.lingyun.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -69,42 +71,28 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity=userRepository.findByUserName(username);
         JSONObject jsonObject=new JSONObject();
 
-       String pwdmd5="";
+
         if(null==userEntity){
             jsonObject.put("status",5000);
             jsonObject.put("menu","");
             jsonObject.put("msg","用户名不存在");
-
+            return ResponseEntity.ok(jsonObject);
         }else {
-
+            jsonObject.put("status",2000);
             String pwd=userEntity.getPassWord();
-            pwdmd5 = StringUtil.md5(password+ userEntity.getUserName().toLowerCase());
-            if(pwd.equals(pwdmd5)){//验证通过
+            if(pwd.equals(password)){//验证通过
                 Long roleId=userEntity.getRoleId();
                 List<MenuEntity> roleAuthEntities=roleAuthRepository.findAllMenuByRoleId(roleId);
-                if(null!=roleAuthEntities &&roleAuthEntities.size()>0){
-                    jsonObject.put("status",2000);
-                    logger.info("权限id"+roleAuthEntities);
-                    jsonObject.put("usreid",userEntity.getId());
-                    jsonObject.put("msg","有权限，验证通过");
-                    jsonObject.put("menu",roleAuthEntities);
-
-                }else {
-                    jsonObject.put("status",2001);
-                    jsonObject.put("menu",null);
-                    jsonObject.put("msg","没有分配菜单权限");
-
-                }
-
+                logger.info("权限id"+roleAuthEntities);
+                jsonObject.put("menu",roleAuthEntities);
+                return ResponseEntity.ok(jsonObject);
             }else {
                 jsonObject.put("status",5001);
                 jsonObject.put("menu","");
                 jsonObject.put("msg","密码不正确");
-
+                return ResponseEntity.ok(jsonObject);
             }
-
         }
-        return ResponseEntity.ok(jsonObject);
     }
 
     @Override
@@ -126,8 +114,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity save(UserEntity userEntity) {
-        String pwdmd5 = StringUtil.md5(userEntity.getPassWord()+ userEntity.getUserName().toLowerCase());
-        userEntity.setPassWord(pwdmd5);
         return  userRepository.saveAndFlush(userEntity);
     }
 
@@ -149,9 +135,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity getOne(Long id) {
         Optional<UserEntity> userEntity=userRepository.findById(id);
-        if(null==userEntity){
-            return null;
-        }
+
 
         return userEntity.get();
     }

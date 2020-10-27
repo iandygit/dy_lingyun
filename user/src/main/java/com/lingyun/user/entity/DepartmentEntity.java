@@ -31,7 +31,7 @@ public class DepartmentEntity {
     private String depCode;
 
     @Column
-    @ApiModelProperty("所属矿区ID")
+    @ApiModelProperty("所属矿区")
     private String orgKq;
 
     @Column

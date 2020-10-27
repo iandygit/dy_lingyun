@@ -7,12 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -29,10 +27,6 @@ import java.util.Date;
 @Component
 @Slf4j
 public class TokenFilter implements GlobalFilter, Ordered {
-    @Autowired
-    private RedisTemplate redisTemplate;
-
-
     Logger logger=LoggerFactory.getLogger(TokenFilter.class);
 
     private String[] skipAuthUrls=new String[]{"/API-POUND/pound","/API-POUND/trasport/","/API-POUND/v2/api-docs","/AUTHSERVER/logOut","/AUTHSERVER/checkRegistValidateCode","/AUTHSERVER/registValidateCode","/checkRegistValidateCode","/registValidateCode","/AUTHSERVER/login","/AUTHSERVER/v2/api-docs","/CONFIGSERVER/v2/api-docs","/AUTHSERVER/v2","/authserver","/swagger","/","/csrf","api-docs","/API-MEMBER/v2/api-docs"};
@@ -47,27 +41,13 @@ public class TokenFilter implements GlobalFilter, Ordered {
         String url = request.getURI().getPath();
 
         logger.info("开始权限过滤......."+url);
-        String uuid = request.getHeaders().getFirst("uuid");
-        if(StringUtils.isNotBlank(uuid) && uuid.contains("mecl_")){
-            String key=request.getHeaders().getFirst("ApiKey");
-            logger.info("开始验证api keys......."+uuid);
-            log.info(uuid.substring(5));
-           Object value=redisTemplate.opsForHash().get("APIKEYS",uuid.substring(5));
-           if(null==value || !value.equals(key)){
-               // 设置401状态码，提示用户没有权限，用户收到该提示后需要重定向到登陆页面
-               response.setStatusCode(HttpStatus.UNAUTHORIZED);
-               return response.setComplete();
-           }else {
-               return chain.filter(exchange);
-           }
-        }
         //跳过不需要验证的路径
         if(null != skipAuthUrls&& Arrays.asList(skipAuthUrls).contains(url)){
             return chain.filter(exchange);
         }
         //从请求头中取得token
         String token = request.getHeaders().getFirst("Authorization");
-
+        String uuid = request.getHeaders().getFirst("uuid");
 
         logger.info("token......."+token);
         boolean jwtInHeader = true;// 标记jwt是否在请求头
@@ -110,8 +90,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
 
                 logger.info("token过期时间==="+sd.format(date)+"---当前时间="+sd.format(dateNow));
 
-                if(date.before(dateNow)){//过期
-
+                if(date.before(dateNow)){
                     // 设置401状态码，提示用户没有权限，用户收到该提示后需要重定向到登陆页面
                     response.setStatusCode(HttpStatus.UNAUTHORIZED);
                     return response.setComplete();

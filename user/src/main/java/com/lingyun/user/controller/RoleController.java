@@ -34,7 +34,8 @@ public class RoleController {
     @ApiOperation(value = "获取单个角色",notes = "通过id获取",tags = "角色管理")
     public ResponseEntity<RoleEntity> getOne(@PathVariable("id") String id){
 
-        return ResponseEntity.ok(roleService.getOne(Long.valueOf(id)));
+
+        return null;
     }
 
     @RequestMapping( method = RequestMethod.POST)
@@ -43,7 +44,7 @@ public class RoleController {
 
         RoleEntity role=roleService.save(roleEntity);
 
-        return ResponseEntity.ok("操作成功");
+        return ResponseEntity.ok("操做成功");
     }
 
 }

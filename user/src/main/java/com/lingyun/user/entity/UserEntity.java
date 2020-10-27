@@ -33,8 +33,7 @@ public class UserEntity  implements Serializable {
     @ApiModelProperty("密码")
     @Column(name = "pass_word")
     private String passWord;
-    @ApiModelProperty("姓名")
-    private String realName;
+
 
     @Column
     @ApiModelProperty("联系电话")

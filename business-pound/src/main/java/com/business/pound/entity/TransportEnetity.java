@@ -41,9 +41,6 @@ public class TransportEnetity {
     @ApiModelProperty("创建时间")
     private String createTime;
 
-    @ApiModelProperty("审批意见")
+    @ApiModelProperty("审批一见你")
     private String apporvalMes;
-
-    @ApiModelProperty("磅房号")
-    private String poundAccount;
 }
