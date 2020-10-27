@@ -5,7 +5,13 @@ spring:
     name: authserver
   aop:
     auto: true # 启动aop配置
-
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: configserver
+      profile: local
+      label: master
 # actuator
 management:
   endpoints:

@@ -11,4 +11,7 @@ import java.util.Map;
 public interface PoundService extends  BaseService<PoundEntity> {
 
 
+    public  List<PoundEntity> findAllByPoundNum(String poundNum);
+
+    public List<PoundEntity>  findAllByPoundAccount(String poundAccount);
 }

@@ -1,18 +1,20 @@
 package com.lingyun.gateway.config;
 
-import com.alibaba.fastjson.JSONArray;
+import com.lingyun.gateway.service.FeignService;
 import com.lingyun.gateway.utils.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -27,9 +29,13 @@ import java.util.Date;
 @Component
 @Slf4j
 public class TokenFilter implements GlobalFilter, Ordered {
+
+    @Autowired
+    private FeignService feignService;
+
     Logger logger=LoggerFactory.getLogger(TokenFilter.class);
 
-    private String[] skipAuthUrls=new String[]{"/API-POUND/pound","/API-POUND/trasport/","/API-POUND/v2/api-docs","/AUTHSERVER/logOut","/AUTHSERVER/checkRegistValidateCode","/AUTHSERVER/registValidateCode","/checkRegistValidateCode","/registValidateCode","/AUTHSERVER/login","/AUTHSERVER/v2/api-docs","/CONFIGSERVER/v2/api-docs","/AUTHSERVER/v2","/authserver","/swagger","/","/csrf","api-docs","/API-MEMBER/v2/api-docs"};
+    private String[] skipAuthUrls=new String[]{"/AUTHSERVER/api","/API-POUND/pound","/API-POUND/trasport/","/API-POUND/v2/api-docs","/AUTHSERVER/logOut","/AUTHSERVER/checkRegistValidateCode","/AUTHSERVER/registValidateCode","/checkRegistValidateCode","/registValidateCode","/AUTHSERVER/login","/AUTHSERVER/v2/api-docs","/CONFIGSERVER/v2/api-docs","/AUTHSERVER/v2","/authserver","/swagger","/","/csrf","api-docs","/API-MEMBER/v2/api-docs"};
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -39,15 +45,33 @@ public class TokenFilter implements GlobalFilter, Ordered {
         response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
         // 获取当前请求路径
         String url = request.getURI().getPath();
+        //从请求头中取得token
+        String token = request.getHeaders().getFirst("Authorization");
 
         logger.info("开始权限过滤......."+url);
+        String uuid = request.getHeaders().getFirst("uuid");
+        if(StringUtils.isNotBlank(uuid) && uuid.contains("mecl_")){
+            String key=request.getHeaders().getFirst("ApiKey");
+            ResponseEntity responseEntity=feignService.checkApiKeys(uuid,key);
+            log.info("HttpStatus==="+responseEntity.getStatusCode());
+
+           if(responseEntity.getStatusCode()==HttpStatus.UNAUTHORIZED){
+               // 设置401状态码，提示用户没有权限，用户收到该提示后需要重定向到登陆页面
+               response.setStatusCode(HttpStatus.UNAUTHORIZED);
+               return response.setComplete();
+           }else {
+               // 令牌正常解析，为了方便在其他微服务进行认证，这里将jwt放入到请求头中
+               request.mutate().header("Authorization", token);
+               logger.info("放行......."+url);
+               // 放行
+               return chain.filter(exchange);
+           }
+        }
         //跳过不需要验证的路径
         if(null != skipAuthUrls&& Arrays.asList(skipAuthUrls).contains(url)){
             return chain.filter(exchange);
         }
-        //从请求头中取得token
-        String token = request.getHeaders().getFirst("Authorization");
-        String uuid = request.getHeaders().getFirst("uuid");
+
 
         logger.info("token......."+token);
         boolean jwtInHeader = true;// 标记jwt是否在请求头
@@ -90,7 +114,8 @@ public class TokenFilter implements GlobalFilter, Ordered {
 
                 logger.info("token过期时间==="+sd.format(date)+"---当前时间="+sd.format(dateNow));
 
-                if(date.before(dateNow)){
+                if(date.before(dateNow)){//过期
+
                     // 设置401状态码，提示用户没有权限，用户收到该提示后需要重定向到登陆页面
                     response.setStatusCode(HttpStatus.UNAUTHORIZED);
                     return response.setComplete();

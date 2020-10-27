@@ -13,4 +13,11 @@ public interface RoleAuthRepository  extends JpaRepository<RoleAuthEntity,Long> 
     @Query("select  m from RoleAuthEntity au left  join MenuEntity m on au.menuId=m.id where au.roleId=:roleId")
     public List<MenuEntity> findAllMenuByRoleId(@Param("roleId")Long roleId);
 
+
+    /**
+     * 删除菜单和角色关联关系
+     * @param roleId
+     * @param menuId
+     */
+    void deleteAllByRoleIdAndMenuId(Long roleId, Long menuId);
 }

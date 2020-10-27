@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
-
     public Page findAllByUserName(String username, Pageable pageable);
 
     public Page<UserEntity> findAllByUserNameAndRoleId(String userName,Long roleId,Pageable pageable);

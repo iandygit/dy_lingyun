@@ -12,4 +12,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface LoginUserFeign  {
     @RequestMapping(value="/user/validata", method= RequestMethod.POST)
     public ResponseEntity<JSONObject> validateUser(@RequestParam(value = "userName") String userName, @RequestParam(value = "passWord") String passWord);
+
 }

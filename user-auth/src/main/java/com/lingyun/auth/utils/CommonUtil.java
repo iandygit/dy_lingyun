@@ -69,4 +69,19 @@ public class CommonUtil {
     }
 
 
+    public static void main(String args[]){
+
+        String a="uuid_key";
+        System.out.println( CommonUtil.StrToBinstr(a));
+
+    }
+    private static String StrToBinstr(String str) {
+        char[] strChar = str.toCharArray();
+        String result = "";
+        for (int i = 0; i < strChar.length; i++) {
+            result += Integer.toBinaryString(strChar[i]) + " ";
+        }
+        return result;
+    }
+
 }

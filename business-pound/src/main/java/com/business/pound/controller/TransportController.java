@@ -1,12 +1,14 @@
 package com.business.pound.controller;
 
 
+import com.business.pound.entity.TransportEnetity;
 import com.business.pound.service.TransportService;
 import com.business.pound.vo.PoundTransVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,5 +53,30 @@ public class TransportController {
 
         Page<PoundTransVo> poundTransVos=transportService.getPageTransport(transportNum,pageable);
         return ResponseEntity.ok(poundTransVos);
+    }
+
+    @RequestMapping(value = "/",method = RequestMethod.POST)
+    @ApiOperation(value = "运单编辑",tags = "运单管理")
+    public ResponseEntity<String> updateTrans(TransportEnetity enetity ){
+         if(null==enetity || null == enetity.getId()){
+
+             return ResponseEntity.ok("false");
+         }
+
+        transportService.save(enetity);
+        return ResponseEntity.ok("true");
+    }
+    @RequestMapping(value = "{id}",method = RequestMethod.GET)
+    @ApiOperation(value = "通过id获取实体",tags = "运单管理")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id",value = "运单id",dataType = "string"),
+    })
+    public ResponseEntity<TransportEnetity>   getOneTran(@PathVariable("id") String id){
+         if(StringUtils.isEmpty(id)){
+             return null;
+         }
+        TransportEnetity enetity=transportService.getOne(Long.valueOf(id));
+
+         return ResponseEntity.ok(enetity);
     }
 }

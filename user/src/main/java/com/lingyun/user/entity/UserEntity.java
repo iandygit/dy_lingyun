@@ -33,7 +33,8 @@ public class UserEntity  implements Serializable {
     @ApiModelProperty("密码")
     @Column(name = "pass_word")
     private String passWord;
-
+    @ApiModelProperty("姓名")
+    private String realName;
 
     @Column
     @ApiModelProperty("联系电话")
@@ -50,9 +51,6 @@ public class UserEntity  implements Serializable {
     private MenuEnum sex=MenuEnum.MAN;
 
 
-    @Column
-    @ApiModelProperty("账号")
-    private String  acount;
 
     @ApiModelProperty("权限id")
     private Long roleId;

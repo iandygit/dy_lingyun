@@ -70,9 +70,9 @@ public class TransportServiceImpl implements TransportService {
     }
 
     @Override
-    public List<PoundTransVo> findAllList() {
+    public List<PoundTransVo> findAllList(String poundAccount) {
 
 
-        return transportRepository.findAllList();
+        return transportRepository.findAllList(poundAccount);
     }
 }
