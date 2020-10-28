@@ -1,7 +1,6 @@
 package com.business.pound.entity;
 
 import com.business.pound.util.PoundEnum;
-import com.business.pound.util.StatusMenu;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -34,7 +33,7 @@ public class TransportEnetity {
     @ApiModelProperty("磅单号")
     private String poundNum;
 
-    @Convert(converter = StatusMenu.Converter.class)
+    @Convert(converter = PoundEnum.Converter.class)
     @ApiModelProperty("状态")
     private PoundEnum status= PoundEnum.IN;
 
