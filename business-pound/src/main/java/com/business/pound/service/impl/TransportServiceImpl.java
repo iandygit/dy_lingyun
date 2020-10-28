@@ -1,9 +1,13 @@
 package com.business.pound.service.impl;
 
 
+import com.business.pound.entity.PoundEntity;
 import com.business.pound.entity.TransportEnetity;
+import com.business.pound.repository.PoundRepository;
 import com.business.pound.repository.TransportRepository;
 import com.business.pound.service.TransportService;
+import com.business.pound.util.OrderCodeFactory;
+import com.business.pound.util.PoundEnum;
 import com.business.pound.vo.PoundTransVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -14,6 +18,8 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +30,8 @@ public class TransportServiceImpl implements TransportService {
 
     @Autowired
     private TransportRepository transportRepository;
+    @Autowired
+    private PoundRepository poundRepository;
 
     @Override
     public TransportEnetity save(TransportEnetity transportEnetity) {
@@ -74,5 +82,35 @@ public class TransportServiceImpl implements TransportService {
 
 
         return transportRepository.findAllList(poundAccount);
+    }
+
+    @Override
+    @Transactional
+    public int apporval(String[] ids, String status) {
+
+         for(int i=0;i<ids.length;i++){
+             TransportEnetity transportEnetity=new TransportEnetity();
+             Long idV=Long.valueOf(ids[i]);
+             transportEnetity.setPoundId(idV);
+             if(null!=status &&status.equals("A")){
+                 transportEnetity.setStatus(PoundEnum.APPORVAL_A);
+             }else {
+                 transportEnetity.setStatus(PoundEnum.APPORVAL_B);
+             }
+             PoundEntity poundEntity=poundRepository.getOne(idV);
+             if(null==poundEntity ||null== poundEntity.getId()){
+                 continue;
+             }
+             transportEnetity.setPoundNum(poundEntity.getPoundNum());
+             transportEnetity.setPoundAccount(poundEntity.getPoundAccount());
+
+
+
+             String transNum=OrderCodeFactory.getTransCode(1L);
+             transportEnetity.setTransportNum(transNum);
+
+             transportRepository.save(transportEnetity);
+        }
+        return 1;
     }
 }

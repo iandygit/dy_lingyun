@@ -4,8 +4,10 @@ import com.business.pound.util.PoundEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -37,8 +39,11 @@ public class TransportEnetity {
     @ApiModelProperty("状态")
     private PoundEnum status= PoundEnum.IN;
 
+
+    @CreatedDate
+    @Column(updatable = false, nullable = false)
     @ApiModelProperty("创建时间")
-    private String createTime;
+    private Date createTime;
 
     @ApiModelProperty("审批意见")
     private String apporvalMes;

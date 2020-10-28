@@ -4,6 +4,7 @@ import com.business.pound.util.PoundEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.io.Serializable;
 @Table(name ="t_pound")
 @Entity
 @ApiModel(description = "磅单实体类")
+@EntityListeners(AuditingEntityListener.class)
 public class PoundEntity implements Serializable {
 
 
@@ -72,6 +74,11 @@ public class PoundEntity implements Serializable {
 
     @Convert(converter = PoundEnum.Converter.class)
     @ApiModelProperty("流向/入库，出库")
+    //@Enumerated(EnumType.ORDINAL)
+    /**
+     * EnumType:  ORDINAL 枚举序数  默认选项（int）。eg:入库 数据库存储的是 0
+     *            STRING：枚举名称       (String)。eg:入库 数据库存储的是 "入库"
+     */
     private PoundEnum flowTo=PoundEnum.IN;;
 
     @ApiModelProperty("磅房号")
@@ -80,7 +87,9 @@ public class PoundEntity implements Serializable {
     @ApiModelProperty("创建时间")
     private String createTime;
 
-
+    @Convert(converter = PoundEnum.Converter.class)
+    @ApiModelProperty("审批通过/未通过/未审批")
+    private PoundEnum poundStatus=PoundEnum.APPORVAL_O;;
 
 
 }

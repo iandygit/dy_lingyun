@@ -45,7 +45,7 @@ public class ExportController {
 
 
 
-        String cloumns[]=new String []{"磅房号","磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","磅房号"};
+        String cloumns[]=new String []{"磅房号","磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向"};
 
 
 
@@ -67,7 +67,7 @@ public class ExportController {
             result[7]=String.valueOf(poundEntity.getTareWeight());//皮重
             result[8]=String.valueOf(poundEntity.getNetWeight());//净重
             result[9]=poundEntity.getFlowTo().getDesc();//货物流向
-            result[10]=poundEntity.getPoundAccount();//磅房号
+            //result[10]=poundEntity.getPoundAccount();//磅房号
             list.add(result);
         }
 

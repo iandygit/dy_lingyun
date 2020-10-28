@@ -13,4 +13,6 @@ public interface TransportService  extends BaseService<TransportEnetity>{
 
 
     public List<PoundTransVo> findAllList(String poundNum);
+
+    public int apporval(String ids[],String msg);
 }

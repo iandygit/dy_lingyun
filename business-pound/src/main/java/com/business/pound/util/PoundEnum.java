@@ -9,6 +9,9 @@ public enum PoundEnum implements PersistEnum2DB<String> {
 
     IN("I","入库"),
     OUT("O","出库"),
+    APPORVAL_O("O","未审批"),
+    APPORVAL_A("A","通过"),
+    APPORVAL_B("B","未通过"),
     SALES("S","销售过磅"),
     REFLUSH("P","采购过磅"),
     INNER("N","内部周转"),

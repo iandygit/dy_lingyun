@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +36,7 @@ public class TransportController {
     @ApiOperation(value = "运单列表数据分页",tags = "运单管理")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "transportNum",value = "运单号号",dataType = "java.lang.String"),
-            @ApiImplicitParam(name = "pageNum",value = "当前页数，不传递默认是1"),
+            @ApiImplicitParam(name = "pageNumber",value = "当前页数，不传递默认是1"),
             @ApiImplicitParam(name = "pageSize",value = "每页显示大小，不传递默认是20")
     })
     public ResponseEntity<Page<PoundTransVo>> all(String transportNum, Integer pageNumber, Integer pageSize){
@@ -48,7 +49,7 @@ public class TransportController {
              pageSize=20;
          }
         //Sort sort = new Sort(Sort.Direction.DESC,"createTime"); //创建时间降序排序
-        Pageable pageable = new PageRequest(pageNumber,pageSize);
+        Pageable pageable = new PageRequest(pageNumber,pageSize, Sort.by("id").descending());
 
 
         Page<PoundTransVo> poundTransVos=transportService.getPageTransport(transportNum,pageable);
@@ -69,7 +70,7 @@ public class TransportController {
     @RequestMapping(value = "{id}",method = RequestMethod.GET)
     @ApiOperation(value = "通过id获取实体",tags = "运单管理")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "运单id",dataType = "string"),
+            @ApiImplicitParam(name = "id",value = "运单id",dataType = "string")
     })
     public ResponseEntity<TransportEnetity>   getOneTran(@PathVariable("id") String id){
          if(StringUtils.isEmpty(id)){
@@ -78,5 +79,25 @@ public class TransportController {
         TransportEnetity enetity=transportService.getOne(Long.valueOf(id));
 
          return ResponseEntity.ok(enetity);
+    }
+
+    @RequestMapping(value = "apporval",method = RequestMethod.GET)
+    @ApiOperation(value = "磅单审批操作",tags = "运单管理")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "ids",value = "磅单id，用英文的逗号拼接起来",dataType = "com.business.pound.util.PoundEnum")
+    })
+    public  ResponseEntity<String>  apporvalName(String ids,String status){
+
+         if(!StringUtils.isEmpty(ids)){
+           String id[]=ids.split(",");
+
+             transportService.apporval(id,status);
+
+
+             return  ResponseEntity.ok("操作成功");
+         }
+
+
+        return  ResponseEntity.ok("操作失败");
     }
 }
