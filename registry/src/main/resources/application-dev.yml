@@ -6,9 +6,12 @@ debug:
   opts: -Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=y,address=${server.debug.port},suspend=n
 eureka:
   client:
+    healthcheck: true
     fetchRegistry: false
+    registry-fetch-interval-seconds: 5 # 默认为30秒
     registerWithEureka: false
     serviceUrl:
       defaultZone: http://registry:8800/eureka/
   server:
-    eviction-interval-timer-in-ms: 3000
+    #清理无效节点的时间间隔，默认60000毫秒，即60秒
+    eviction-interval-timer-in-ms: 5000

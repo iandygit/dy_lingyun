@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lingyun.user.entity.MenuEntity;
 import com.lingyun.user.service.MenuService;
 import com.lingyun.user.service.RoleAuthService;
+import com.lingyun.user.vo.MenuVo;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,12 +51,9 @@ public class RoleAuthController {
 
     @RequestMapping(value = "/",method = RequestMethod.GET)
     @ApiOperation(value = "通过角色id获得权限列表",tags = "权限管理")
-    public ResponseEntity<JSONArray> getAllAuth(String roleid){
+    public ResponseEntity<JSONArray> getAllAuth(Integer roleid){
 
-        if(StringUtils.isEmpty(roleid)){
-            return null;
-        }
-        List<MenuEntity> menuEntities=menuService.findAllByRoleId(Long.valueOf(roleid));
+        List<MenuEntity> menuEntities=menuService.findAllByRoleId(roleid);
 
         JSONArray jsonArray=new JSONArray();
         jsonArray.addAll(menuEntities);
@@ -66,11 +64,21 @@ public class RoleAuthController {
     @RequestMapping(value = "/auth",method = RequestMethod.POST)
     @ApiOperation(value = "删除关联权限",tags = "权限管理")
     public ResponseEntity<JSONObject> deleteAuth(String roleid,String menuId){
+        JSONObject object=new JSONObject();
+        if(StringUtils.isEmpty(roleid) ||StringUtils.isEmpty(menuId)){
+            object.put("status",201);
+            object.put("mesg","操作失败，权限或者菜单不能为空");
+
+
+        }
+        object.put("status",200);
+        object.put("mesg","操作成功");
+
+        roleAuthService.deleteByRoleIdAndMenuId(Long.valueOf(roleid),Long.valueOf(menuId));
 
 
 
-
-          return  null;
+        return ResponseEntity.ok(object);
 
     }
 

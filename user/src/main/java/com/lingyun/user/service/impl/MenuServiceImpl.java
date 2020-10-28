@@ -3,6 +3,8 @@ package com.lingyun.user.service.impl;
 import com.lingyun.user.dao.MenuRepository;
 import com.lingyun.user.entity.MenuEntity;
 import com.lingyun.user.service.MenuService;
+import com.lingyun.user.vo.MenuVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -25,11 +27,12 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public List<MenuEntity> findAllByRoleId(Long roleId) {
+    public List<MenuEntity> findAllByRoleId(Integer roleId) {
 
-
-
-        return menuRepository.findAllByRoleId(roleId);
+        if(null==roleId){
+            return menuRepository.findMenusAuth(null);
+        }
+        return menuRepository.findMenusAuth(Long.valueOf(roleId));
     }
 
 

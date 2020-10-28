@@ -69,7 +69,7 @@ spring:
       # 合并多个DruidDataSource的监控数据
       useGlobalDataSourceStat: true
     vipmember:
-      url: jdbc:mysql://127.0.0.1:3306/magic?useUnicode=true&characterEncoding=utf8&autoReconnect=true
+      url: jdbc:mysql://127.0.0.1:3306/magic?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
       username: root
       password: 123456abc
       driver-class-name: com.mysql.jdbc.Driver
@@ -135,19 +135,10 @@ feign:
   client:
   config:
     feignName: myServiceName
-    connectTimeout: 5000
-    readTimeout: 5000
+    connectTimeout: 6000
+    readTimeout: 6000
     loggerLevel: full
-# hystrix 信号量隔离，5秒后自动超时
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          strategy: SEMAPHORE
-          thread:
-            timeoutInMilliseconds: 5000
-  shareSecurityContext: true
+
 #  security:
 #    basic:
 #      path: /swagger-ui.html,/v2/api-docs # 拦截的路径

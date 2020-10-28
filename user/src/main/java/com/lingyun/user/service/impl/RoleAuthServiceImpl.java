@@ -58,7 +58,7 @@ public class RoleAuthServiceImpl implements RoleAuthService {
 
     @Override
     public List<MenuEntity> findAllMenuByRoleId(Long roleId) {
-        return roleAuthRepository.findAllMenuByRoleId(roleId);
+        return roleAuthRepository.findMenusAuth(roleId);
     }
 
     @Override

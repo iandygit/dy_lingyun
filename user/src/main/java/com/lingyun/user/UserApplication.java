@@ -19,9 +19,4 @@ public class UserApplication {
         SpringApplication.run(UserApplication.class);
     }
 
-    @LoadBalanced
-    @Bean
-    public RestTemplate restTemplate(){
-        return  new RestTemplate();
-    }
 }
