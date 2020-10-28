@@ -36,7 +36,7 @@ public class TransportEnetity {
 
     @Convert(converter = StatusMenu.Converter.class)
     @ApiModelProperty("状态")
-    private StatusMenu status= StatusMenu.IN;
+    private PoundEnum status= PoundEnum.IN;
 
     @ApiModelProperty("创建时间")
     private String createTime;
