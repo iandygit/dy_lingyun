@@ -138,6 +138,16 @@ feign:
     connectTimeout: 5000
     readTimeout: 5000
     loggerLevel: full
+# hystrix 信号量隔离，5秒后自动超时
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            timeoutInMilliseconds: 5000
+  shareSecurityContext: true
 #  security:
 #    basic:
 #      path: /swagger-ui.html,/v2/api-docs # 拦截的路径

@@ -64,11 +64,11 @@ public class LoginController {
 
 
             boolean falg=redisTemplate.hasKey(userName+"_role"); //判断key是否存在
-            if(!falg){//不存在则，set
+            //if(!falg){//不存在则，set
 
                 //权限放入redis中
                 redisTemplate.opsForValue().set(userName+"_role",responseEntity.getBody());
-            }
+            //}
             //ValueOperations operations=redisTemplate.opsForValue();
 
             if("2000".equals(status)){//验证通过，

@@ -8,8 +8,6 @@ import com.lingyun.user.entity.MenuEntity;
 import com.lingyun.user.entity.UserEntity;
 import com.lingyun.user.service.UserService;
 import com.lingyun.user.vo.UserVo;
-
-import com.lingyun.user.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import com.lingyun.user.util.StringUtil;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
