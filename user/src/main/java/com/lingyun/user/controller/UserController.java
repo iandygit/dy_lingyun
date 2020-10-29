@@ -47,12 +47,15 @@ public class UserController {
         }
         if(null==pageNum || pageNum<=1){
             pageNum=0;
+        }else {
+            pageNum=pageNum-1;
         }
         if(StringUtils.isEmpty(phoneNum)){
             phoneNum=null;
         }
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable= new PageRequest(pageNum,pageSize,sort);
+
         logger.info("开始用户数据列表");
         Page<UserVo> list = this.userService.findallByRoleIdAdIphone(phoneNum,roleId,pageable);
         logger.info("用户数据列表结束");
