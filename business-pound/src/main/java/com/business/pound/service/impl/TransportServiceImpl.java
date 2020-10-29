@@ -81,7 +81,9 @@ public class TransportServiceImpl implements TransportService {
     @Override
     public List<PoundTransVo> findAllList(String transportNum) {
 
-
+         if(org.apache.commons.lang3.StringUtils.isEmpty(transportNum)){
+             transportRepository.findAllList();
+         }
         return transportRepository.findAllList(transportNum);
     }
 
