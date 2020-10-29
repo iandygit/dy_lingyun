@@ -105,7 +105,9 @@ public class ExportController {
             result[6]=String.valueOf(poundEntity.getWeight());//毛重
             result[7]=String.valueOf(poundEntity.getTareWeight());//皮重
             result[8]=String.valueOf(poundEntity.getNetWeight());//净重
-            result[9]=poundEntity.getFlowTo().getDesc();//货物流向
+            logger.info(poundEntity.getFlowTo().name());
+            String flow_to=poundEntity.getFlowTo().getDesc();
+            result[9]=flow_to;//货物流向
             result[10]=poundEntity.getPoundAccount();//磅房号
             list.add(result);
         }

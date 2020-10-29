@@ -57,7 +57,7 @@ public class PoundTransVo {
 
     @Convert(converter = PoundEnum.Converter.class)
     @ApiModelProperty("流向/入库，出库")
-    private PoundEnum flowTo=PoundEnum.IN;;
+    private PoundEnum flowTo=PoundEnum.IN;
 
     @ApiModelProperty("磅房号")
     private String poundAccount;
@@ -69,6 +69,7 @@ public class PoundTransVo {
         this.transportId=transportId;
         this.poundId=poundId;
         this.transportNum=transportNum;
+        this.poundNum=poundNum;
         this.carNum=carNum;
         this.goodsName=goodsName;
         this.reciveUnit=reciveUnit;
@@ -79,7 +80,6 @@ public class PoundTransVo {
         this.poundWeight=poundWeight;
         this.flowTo=flowTo;
         this.poundAccount=poundAccount;
-        this.poundNum=poundNum;
 
 
     }
