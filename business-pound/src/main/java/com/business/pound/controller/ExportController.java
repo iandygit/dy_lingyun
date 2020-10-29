@@ -82,9 +82,9 @@ public class ExportController {
     }
     @GetMapping("transport")
     @ApiOperation(value = "运单记录导出",tags = "导出管理")
-    public ResponseEntity<String>  exportTransport(String poundAccount,  HttpServletResponse response){
+    public ResponseEntity<String>  exportTransport(String transportNum,  HttpServletResponse response){
 
-         List<PoundTransVo> transportEnetity= transportService.findAllList(poundAccount);
+         List<PoundTransVo> transportEnetity= transportService.findAllList(transportNum);
          String cloumns[]=new String []{"运单号","磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","磅房号"};
 
         List list=new ArrayList();

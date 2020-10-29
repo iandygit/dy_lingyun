@@ -32,8 +32,8 @@ public interface PoundRepository extends JpaRepository<PoundEntity,Long> {
      * @return
      */
     @Query(value = "select   new  com.business.pound.vo.StatisAnalySIsB(p.deliverUnit,count(p.deliverUnit),(select count(1)  " +
-            " from PoundEntity where deliverUnit is not null and (:poundAccount is null or poundAccount=:poundAccount)) as vo) " +
-            "from PoundEntity p where  (:poundAccount is null or p.poundAccount=:poundAccount) group by p.deliverUnit")
+            " from PoundEntity where deliverUnit is not null and (:poundAccount is null or :poundAccount='' or poundAccount=:poundAccount)) as vo) " +
+            "from PoundEntity p where  (:poundAccount is null or :poundAccount='' or p.poundAccount=:poundAccount) group by p.deliverUnit")
     public List<StatisAnalySIsB> findAllByPoundAccDeDeUnit(@Param("poundAccount")String poundAccount);
 
     /**
@@ -42,7 +42,7 @@ public interface PoundRepository extends JpaRepository<PoundEntity,Long> {
      * @return
      */
     @Query(value = "select   new  com.business.pound.vo.StatisAnalySIsB(p.reciveUnit,count(p.reciveUnit),(select count(1) as total " +
-            "from PoundEntity where reciveUnit is not null and  (:poundNum is null or poundNum=:poundNum)) )" +
+            "from PoundEntity where reciveUnit is not null and  (:poundNum is null or :poundAccount='' or poundNum=:poundNum)) )" +
             " from PoundEntity p where  (:poundNum is null or p.poundNum=:poundNum) group by p.reciveUnit")
     public List<StatisAnalySIsB> findAllByPoundNumRecUnit(@Param("poundNum")String poundNum);
 
@@ -52,8 +52,8 @@ public interface PoundRepository extends JpaRepository<PoundEntity,Long> {
      * @return
      */
     @Query(value = "select   new  com.business.pound.vo.StatisAnalySIsB(p.reciveUnit,count(p.reciveUnit),(select count(1) as total " +
-            "from PoundEntity where reciveUnit is not null and  (:poundAccount is null or poundAccount=:poundAccount)) )" +
-            " from PoundEntity p where  (:poundAccount is null or p.poundAccount=:poundAccount) group by p.reciveUnit")
+            "from PoundEntity where reciveUnit is not null and  (:poundAccount is null or :poundAccount='' or poundAccount=:poundAccount)) )" +
+            " from PoundEntity p where  (:poundAccount is null or :poundAccount='' or p.poundAccount=:poundAccount) group by p.reciveUnit")
     public List<StatisAnalySIsB> findAllByPoundAccRecUnit(@Param("poundAccount")String poundAccount);
 
     /**
