@@ -69,12 +69,16 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "添加/编辑用户", notes = "用户管理", tags = "用户管理")
     public ResponseEntity<String> saveUseer(UserEntity userEntity){
-        logger.info("开始添加用户");
+        logger.info("开始操作用户");
         UserEntity user= userService.save(userEntity);
         if(null==user){
-            return ResponseEntity.ok("操作失败");
+            if(null!=userEntity.getId()){//编辑
+                return ResponseEntity.ok("用户更新失败，找不到合法的数据");
+            }else {
+                return ResponseEntity.ok("添加失败，用户名重复");
+            }
         }
-        logger.info("结束添加用户");
+        logger.info("操作用户完成");
         return ResponseEntity.ok("操作成功");
     }
     @RequestMapping(value = "/{userName}",method = RequestMethod.GET)

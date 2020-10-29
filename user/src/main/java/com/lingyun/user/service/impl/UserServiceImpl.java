@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.lingyun.user.util.StringUtil;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -123,17 +124,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserEntity save(UserEntity userEntity) {
         String pwdmd5 = StringUtil.md5(userEntity.getPassWord()+ userEntity.getUserName().toLowerCase());
         userEntity.setPassWord(pwdmd5);
-        UserEntity entity= userRepository.findByUserName(userEntity.getUserName());
-        //用户名不存在
-        if(null==entity ){
+        if(null!=userEntity.getId()){//编辑
+            Optional<UserEntity> entity=userRepository.findById(userEntity.getId());
+            if(null==entity){
+                return null;
+            }
+            userEntity.setUserName(entity.get().getUserName());
             return  userRepository.saveAndFlush(userEntity);
-        }else {
-            return  null;
+        }else{//新增
+            UserEntity entity= userRepository.findByUserName(userEntity.getUserName());
+            //用户名不存在
+            if(null==entity ){//可以插入
+                return  userRepository.save(userEntity);
+            }else {
+                return  null;
+            }
         }
-
     }
 
     @Override
