@@ -86,7 +86,7 @@ public class PoundController {
      */
     @RequestMapping( method = RequestMethod.POST)
     @ApiOperation(value = "磅单/编辑磅单记录", notes = "插入/编辑操作", tags = "磅单管理")
-    public ResponseEntity<String> save(@RequestBody  PoundEntity poundEntity){
+    public ResponseEntity<String> save(PoundEntity poundEntity){
 
          poundService.save(poundEntity);
 
