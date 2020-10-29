@@ -43,6 +43,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
         response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
+
         // 获取当前请求路径
         String url = request.getURI().getPath();
         //从请求头中取得token
