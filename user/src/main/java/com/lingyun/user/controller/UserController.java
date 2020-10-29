@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,14 +45,14 @@ public class UserController {
         if(null==pageSize ||pageSize ==0){
             pageSize=20;
         }
-        if(null==pageNum || pageNum==0){
-            pageNum=1;
+        if(null==pageNum || pageNum<=1){
+            pageNum=0;
         }
         if(StringUtils.isEmpty(phoneNum)){
             phoneNum=null;
         }
-
-        Pageable pageable= new PageRequest(pageNum,pageSize);
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Pageable pageable= new PageRequest(pageNum,pageSize,sort);
         logger.info("开始用户数据列表");
         Page<UserVo> list = this.userService.findallByRoleIdAdIphone(phoneNum,roleId,pageable);
         logger.info("用户数据列表结束");
