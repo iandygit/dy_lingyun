@@ -35,14 +35,14 @@ public class TokenFilter implements GlobalFilter, Ordered {
 
     Logger logger=LoggerFactory.getLogger(TokenFilter.class);
 
-    private String[] skipAuthUrls=new String[]{"/AUTHSERVER/api","/API-POUND/pound","/API-POUND/trasport/","/API-POUND/v2/api-docs","/AUTHSERVER/logOut","/AUTHSERVER/checkRegistValidateCode","/AUTHSERVER/registValidateCode","/checkRegistValidateCode","/registValidateCode","/AUTHSERVER/login","/AUTHSERVER/v2/api-docs","/CONFIGSERVER/v2/api-docs","/AUTHSERVER/v2","/authserver","/swagger","/","/csrf","api-docs","/API-MEMBER/v2/api-docs"};
+    private String[] skipAuthUrls=new String[]{"/API-MEMBER/druid","/API-POUND/druid/","/AUTHSERVER/api","/API-POUND/pound","/API-POUND/trasport/","/API-POUND/v2/api-docs","/AUTHSERVER/logOut","/AUTHSERVER/checkRegistValidateCode","/AUTHSERVER/registValidateCode","/checkRegistValidateCode","/registValidateCode","/AUTHSERVER/login","/AUTHSERVER/v2/api-docs","/CONFIGSERVER/v2/api-docs","/AUTHSERVER/v2","/authserver","/swagger","/","/csrf","api-docs","/API-MEMBER/v2/api-docs"};
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
-       // response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
+        response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
         // 获取当前请求路径
         String url = request.getURI().getPath();
         //从请求头中取得token
@@ -69,6 +69,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
         }
         //跳过不需要验证的路径
         if(null != skipAuthUrls&& Arrays.asList(skipAuthUrls).contains(url)){
+            logger.info("开始放行......."+url);
             return chain.filter(exchange);
         }
 
