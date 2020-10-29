@@ -8,6 +8,7 @@ import com.business.pound.repository.TransportRepository;
 import com.business.pound.service.TransportService;
 import com.business.pound.util.OrderCodeFactory;
 import com.business.pound.util.PoundEnum;
+import com.business.pound.util.TransportEnum;
 import com.business.pound.vo.PoundTransVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -92,11 +93,7 @@ public class TransportServiceImpl implements TransportService {
              TransportEnetity transportEnetity=new TransportEnetity();
              Long idV=Long.valueOf(ids[i]);
              transportEnetity.setPoundId(idV);
-             if(null!=status &&status.equals("A")){
-                 transportEnetity.setStatus(PoundEnum.APPORVAL_A);
-             }else {
-                 transportEnetity.setStatus(PoundEnum.APPORVAL_B);
-             }
+
              PoundEntity poundEntity=poundRepository.getOne(idV);
              if(null==poundEntity ||null== poundEntity.getId()){
                  continue;
@@ -104,12 +101,13 @@ public class TransportServiceImpl implements TransportService {
              transportEnetity.setPoundNum(poundEntity.getPoundNum());
              transportEnetity.setPoundAccount(poundEntity.getPoundAccount());
 
-
+             transportEnetity.setStatus(TransportEnum.A);
 
              String transNum=OrderCodeFactory.getTransCode(1L);
              transportEnetity.setTransportNum(transNum);
 
              transportRepository.save(transportEnetity);
+             poundEntity.setPoundStatus(PoundEnum.valueOf(status));//审批结果
         }
         return 1;
     }

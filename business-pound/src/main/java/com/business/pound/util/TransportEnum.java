@@ -4,18 +4,13 @@ package com.business.pound.util;
 import com.business.pound.util.converter.AbstractEnumConverter;
 import com.business.pound.util.converter.PersistEnum2DB;
 
-public enum PoundEnum implements PersistEnum2DB<String> {
+public enum TransportEnum implements PersistEnum2DB<String> {
 
 
-    IN("I","入库"),
-    OUT("O","出库"),
-    APPORVAL_W("W","未审批"),
-    APPORVAL_A("A","通过"),
-    APPORVAL_B("B","未通过"),
-    SALES("S","销售过磅"),
-    REFLUSH("P","采购过磅"),
-    INNER("N","内部周转"),
-    OTHRE("T","其他过磅");
+    E("E","异常"),
+    A("A","初始化"),
+    B("B","退回"),
+    C("C","完成");
 
 
     private String desc;
@@ -23,7 +18,7 @@ public enum PoundEnum implements PersistEnum2DB<String> {
 
     private String code;
 
-    private PoundEnum(String code, String desc){
+    private TransportEnum(String code, String desc){
         this.code=code;
         this.desc=desc;
     }
@@ -50,10 +45,10 @@ public enum PoundEnum implements PersistEnum2DB<String> {
         return code;
     }
 
-    public static class Converter extends AbstractEnumConverter<PoundEnum, String> {
+    public static class Converter extends AbstractEnumConverter<TransportEnum, String> {
 
         public Converter() {
-            super(PoundEnum.class);
+            super(TransportEnum.class);
         }
     }
 

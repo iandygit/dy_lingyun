@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ import java.util.List;
 @RequestMapping("/pound")
 @Api(value = "磅单管理",tags = {"磅单管理"})
 public class PoundController {
-
+    Logger logger= LoggerFactory.getLogger(PoundController.class);
     @Autowired
     private PoundService poundService;
 
@@ -32,13 +34,15 @@ public class PoundController {
      * @return
      */
     @RequestMapping( method = RequestMethod.GET)
-    @ApiOperation(value = "磅单数据列表", notes = "支持按照名称查询", tags = "磅单管理")
+    @ApiOperation(value = "磅单数据列表", notes = "支持按照名称查询，状态查询", tags = "磅单管理")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "poundAccount",value = "磅房号"),
+            @ApiImplicitParam(name = "poundStatus",value = "磅单状态",dataType = "String", paramType = "query",
+                    allowableValues = "APPORVAL_W,APPORVAL_A,APPORVAL_B", allowMultiple = false),
             @ApiImplicitParam(name = "pageNum",value = "当前页数，不传递默认是1"),
             @ApiImplicitParam(name = "pageSize",value = "每页显示大小，不传递默认是20")
     })
-    public ResponseEntity<Page<PoundEntity>> all(String poundAccount,Integer pageNum,Integer pageSize){
+    public ResponseEntity<Page<PoundEntity>> all(String poundAccount,String poundStatus,Integer pageNum,Integer pageSize){
         if(null==pageNum || pageNum==0){
             pageNum=0;
         }else {
@@ -52,8 +56,18 @@ public class PoundController {
         PoundEntity entityExample=new PoundEntity();
         ExampleMatcher matcher = ExampleMatcher.matching();
 
-        //matcher.withMatcher("poundStatus",ExampleMatcher.GenericPropertyMatchers.contains());
-        //entityExample.setPoundStatus(PoundEnum.APPORVAL_O);//未审批状态的数据
+
+
+        matcher.withMatcher("poundStatus",ExampleMatcher.GenericPropertyMatchers.contains());
+        if(StringUtils.isNoneEmpty(poundStatus)){
+            String poundStatusCode=PoundEnum.valueOf(poundStatus).getCode();
+            logger.info("状态参数："+poundStatusCode);
+            entityExample.setPoundStatus(PoundEnum.valueOf(poundStatus));//未审批状态的数据
+
+        }else {
+            entityExample.setPoundStatus(PoundEnum.APPORVAL_W);//未审批状态的数据
+
+        }
 
         if(StringUtils.isNoneEmpty(poundAccount)){
             matcher.withMatcher("poundAccount",ExampleMatcher.GenericPropertyMatchers.contains());

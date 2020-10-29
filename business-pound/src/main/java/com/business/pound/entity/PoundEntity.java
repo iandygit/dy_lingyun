@@ -89,7 +89,7 @@ public class PoundEntity implements Serializable {
 
     @Convert(converter = PoundEnum.Converter.class)
     @ApiModelProperty("审批通过/未通过/未审批")
-    private PoundEnum poundStatus=PoundEnum.APPORVAL_O;;
+    private PoundEnum poundStatus=PoundEnum.APPORVAL_W;;
 
 
 }

@@ -84,7 +84,9 @@ public class TransportController {
     @RequestMapping(value = "apporval",method = RequestMethod.GET)
     @ApiOperation(value = "磅单审批操作",tags = "运单管理")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "ids",value = "磅单id，用英文的逗号拼接起来",dataType = "com.business.pound.util.PoundEnum")
+            @ApiImplicitParam(name = "ids",value = "磅单id，用英文的逗号拼接起来",dataType = "com.business.pound.util.PoundEnum"),
+            @ApiImplicitParam(name = "status",value = "审批结果，通过未通过",dataType = "String", paramType = "query",
+                    allowableValues = "APPORVAL_W,APPORVAL_A,APPORVAL_B", allowMultiple = false)
     })
     public  ResponseEntity<String>  apporvalName(String ids,String status){
 
