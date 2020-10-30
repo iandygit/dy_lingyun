@@ -145,8 +145,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserEntity save(UserEntity userEntity) {
-        String pwdmd5 = StringUtil.md5(userEntity.getPassWord()+ userEntity.getUserName().toLowerCase());
-        userEntity.setPassWord(pwdmd5);
+        //String pwdmd5 = StringUtil.md5(userEntity.getPassWord()+ userEntity.getUserName().toLowerCase());
+        //userEntity.setPassWord(pwdmd5);
         if(null!=userEntity.getId()){//编辑
             Optional<UserEntity> entity=userRepository.findById(userEntity.getId());
             if(null==entity){
