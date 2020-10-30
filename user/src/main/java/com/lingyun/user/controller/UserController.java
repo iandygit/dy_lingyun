@@ -122,4 +122,31 @@ public class UserController {
         return userEntity;
     }
 
+    @RequestMapping(value = "{id}",method = RequestMethod.DELETE)
+    @ApiOperation(value = "通过id删除用户", notes = "通过id删除用户信息", tags = "用户管理")
+    public ResponseEntity<JSONObject> deleteUser(Integer id){
+        JSONObject object=new JSONObject();
+        if(null==id){
+            object.put("status","201");
+            object.put("msg","用户id不能为空");
+
+        }
+        userService.deleteById(Long.valueOf(id));
+        object.put("status","200");
+        object.put("msg","操作成功");
+        return ResponseEntity.ok(object);
+    }
+    @RequestMapping(value = "{id}",method = RequestMethod.PUT)
+    @ApiOperation(value = "密码修改", notes = "通过用户id和用户名修改密码", tags = "用户管理")
+    public ResponseEntity<JSONObject> updatePassword(@PathVariable("id") Integer id,String username,String password){
+
+
+        JSONObject object= userService.updatePassword(id,username,password);
+
+
+
+        return ResponseEntity.ok(object);
+    }
+
+
 }

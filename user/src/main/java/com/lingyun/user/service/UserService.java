@@ -20,5 +20,7 @@ public interface UserService extends  BaseService<UserEntity>{
 
     public Page<UserVo>  findallByRoleIdAdIphone(String iphoneNum, Long roleId, Pageable pageable);
 
+    public JSONObject updatePassword(Integer id,String username,String password);
+
 
 }

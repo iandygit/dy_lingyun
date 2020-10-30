@@ -112,6 +112,25 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.findallByRoleIdAndIphoneNum(iphoneNum,roleId,pageable);
     }
+
+    @Override
+    @Transactional
+    public JSONObject updatePassword(Integer id, String username, String password) {
+        JSONObject object=new JSONObject();
+        UserEntity userEntity=userRepository.findByIdAndUserName(Long.valueOf(id),username);
+        if(null==userEntity){
+               object.put("status","201");
+               object.put("msg","用户不存在");
+
+        }else {
+            String pwdmd5 = StringUtil.md5(password+ username.toLowerCase());
+            userEntity.setPassWord(pwdmd5);
+            object.put("status","200");
+            object.put("msg","密码更改成功");
+        }
+        return object;
+    }
+
     /**
      * 给hql参数设置值
      * @param query 查询

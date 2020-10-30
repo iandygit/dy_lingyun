@@ -23,4 +23,6 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
     //public  Page<UserVo> findallByRoleIdAndIphone(@Param("phoneNum") String phoneNum,@Param("roleId") Long roleId,Pageable pageable);
 
 
+    public  UserEntity findByIdAndUserName(Long id,String userName);
+
 }
