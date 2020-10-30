@@ -112,6 +112,7 @@ public class UserController {
                return ResponseEntity.ok(null);
         }
         UserEntity userEntity=userService.getOne(Long.valueOf(userId));
+        userEntity.setPassWord("");//不返回密码给客户端
         return ResponseEntity.ok(userEntity);
     }
     @RequestMapping(value = "validata",method = RequestMethod.POST)
@@ -124,7 +125,7 @@ public class UserController {
 
     @RequestMapping(value = "{id}",method = RequestMethod.DELETE)
     @ApiOperation(value = "通过id删除用户", notes = "通过id删除用户信息", tags = "用户管理")
-    public ResponseEntity<JSONObject> deleteUser(Integer id){
+    public ResponseEntity<JSONObject> deleteUser(@PathVariable("id") Integer id){
         JSONObject object=new JSONObject();
         if(null==id){
             object.put("status","201");
