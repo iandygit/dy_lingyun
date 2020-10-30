@@ -147,12 +147,13 @@ public class UserServiceImpl implements UserService {
     public UserEntity save(UserEntity userEntity) {
         //String pwdmd5 = StringUtil.md5(userEntity.getPassWord()+ userEntity.getUserName().toLowerCase());
         //userEntity.setPassWord(pwdmd5);
-        if(null!=userEntity.getId()){//编辑
+        if(null!=userEntity.getId() && userEntity.getId()!=0 ){//编辑
             Optional<UserEntity> entity=userRepository.findById(userEntity.getId());
             if(null==entity){
                 return null;
             }
-            userEntity.setUserName(entity.get().getUserName());
+            userEntity.setPassWord(entity.get().getPassWord());//密码不允许修改
+            userEntity.setUserName(entity.get().getUserName());//用户名不允许修改
             return  userRepository.saveAndFlush(userEntity);
         }else{//新增
             UserEntity entity= userRepository.findByUserName(userEntity.getUserName());

@@ -36,10 +36,10 @@ public class Swagger2 extends AbstractSwagger2  {
                 .build();
     }
     private ApiInfo apiInfo() {
-        Contact contact = new Contact("综合信息管理系统APIs.", "http://www.51gkp.com", "magic_sys@lasergroup.cn");
+        Contact contact = new Contact("用户中心管理.", "http://www.51gkp.com", "magic_sys@lasergroup.cn");
         return new ApiInfoBuilder()
-                .title("综合信息管理系统 API")
-                .description("网站管理api")
+                .title("用户中心管理 API")
+                .description("用户中心管理api")
                 //.termsOfServiceUrl("https://www.51gkp.com")
                 .licenseUrl("https://company.51gkp.com")
                 .contact(contact)
