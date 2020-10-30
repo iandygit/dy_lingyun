@@ -145,8 +145,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserEntity save(UserEntity userEntity) {
-        //String pwdmd5 = StringUtil.md5(userEntity.getPassWord()+ userEntity.getUserName().toLowerCase());
-        //userEntity.setPassWord(pwdmd5);
+
         if(null!=userEntity.getId() && userEntity.getId()!=0 ){//编辑
             Optional<UserEntity> entity=userRepository.findById(userEntity.getId());
             if(null==entity){
@@ -156,9 +155,12 @@ public class UserServiceImpl implements UserService {
             userEntity.setUserName(entity.get().getUserName());//用户名不允许修改
             return  userRepository.saveAndFlush(userEntity);
         }else{//新增
+
             UserEntity entity= userRepository.findByUserName(userEntity.getUserName());
             //用户名不存在
             if(null==entity ){//可以插入
+                String pwdmd5 = StringUtil.md5(userEntity.getPassWord()+ userEntity.getUserName().toLowerCase());
+                userEntity.setPassWord(pwdmd5);
                 return  userRepository.save(userEntity);
             }else {
                 return  null;
