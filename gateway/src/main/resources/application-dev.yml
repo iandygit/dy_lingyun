@@ -52,6 +52,10 @@ spring:
             - Path=/API-POUND/**
           filters:
             - StripPrefix=1
+            - name: Retry
+              args:
+                retries: 1
+                series: SERVER_ERROR
             - name: Hystrix
               args:
                 name: fallback
@@ -63,7 +67,6 @@ spring:
         '[/**]':
           allowedOrigins: "*"
           allowedMethods: "*"
-
 logging:
   level:
     org.springframework.cloud.gateway: ERROR

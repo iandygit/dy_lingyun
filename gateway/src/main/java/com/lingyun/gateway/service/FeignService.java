@@ -12,4 +12,6 @@ public interface FeignService {
     @RequestMapping(value="/api", method= RequestMethod.GET)
     public ResponseEntity<JSONObject> checkApiKeys(@RequestParam(value = "uuid")String uuid, @RequestParam(value = "apikey")String apikey);
 
+
+
 }
