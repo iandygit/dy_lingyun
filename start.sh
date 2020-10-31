@@ -18,22 +18,25 @@ echo "显示网卡信息"
 echo $(ip addr show ens33 | grep "inet ")
 echo "---------------------------------------------------------"
 
+#杀死所有服务进程
+ps -ef | grep registry | grep -v grep | awk '{print $2}' | xargs kill -9
+ps -ef | grep configserver | grep -v grep | awk '{print $2}' | xargs kill -9
+ps -ef | grep user | grep -v grep | awk '{print $2}' | xargs kill -9
+ps -ef | grep user-auth | grep -v grep | awk '{print $2}' | xargs kill -9
+ps -ef | grep business-pound | grep -v grep | awk '{print $2}' | xargs kill -9
+ps -ef | grep gateway | grep -v grep | awk '{print $2}' | xargs kill -9
+
+
 #启动注册中心
 count=^ps -ef | grep registry | grep -v "grep" | wc -l^
-echo  获取服务pid: ${count}
-
-kill -9 ${count}
-
-nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/registry-1.0-SNAPSHOT.jar  >>${base_dir}/registry.log 2>&1 &
-
 
 sec=7
 for var in 1 2 3
 do
  if [ 0 -eq $count || !  $count ]
  then
- #启动配置服务
-    nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/connfigserver-1.0-SNAPSHOT.jar  >>${base_dir}/connfigserver.log 2>&1 &
+ #启动注册中心服务
+    nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/registry-1.0-SNAPSHOT.jar  >>${base_dir}/registry.log 2>&1 &
     echo "break"
           break
  else
@@ -53,12 +56,13 @@ fi
 
 
 count1=^ps -ef | grep connfigserver | grep -v "grep" | wc -l^
+
 for var in 1 2 3
   do
   if [ 0 -eq count1 || ! $count1 ]
     then
        echo "开始启动配置服务"
-       nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/connfigserver-SNAPSHOT.jar  >>${base_dir}/connfigserver.log 2>&1 &
+       nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/configserver-SNAPSHOT.jar  >>${base_dir}/configserver.log 2>&1 &
        return
      else
        echo 正在启配置服务，再次尝试....
