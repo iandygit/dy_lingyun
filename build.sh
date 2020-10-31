@@ -14,7 +14,7 @@ mvn clean install -DskipTests
 
 ##将jar copy至相应目录
 cp ./registry/target/registry-1.0-SNAPSHOT.jar $base_dir/registry/
-cp ./configserver/target/connfigserver-1.0-SNAPSHOT.jar $base_dir/configserver/
+cp ./configserver/target/configserver-1.0-SNAPSHOT.jar $base_dir/configserver/
 cp ./user/target/user-1.0-SNAPSHOT.jar $base_dir/user/
 cp ./user-auth/target/user-auth-1.0-SNAPSHOT.jar $base_dir/user-auth/
 cp ./business-pound/target/business-pound-1.0-SNAPSHOT.jar $base_dir/business-pound/
