@@ -38,7 +38,7 @@ count= ps -ef | grep registry | grep -v "grep" | wc -l
 sec=7
 for var in 1 2 3
 do
- if [ 0 -eq $count || ! $count  ]
+ if [ 0 -eq $count || [ -z $count ] ]
  then
  #启动注册中心服务
     nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/registry-1.0-SNAPSHOT.jar  >>${base_dir}/registry.log 2>&1 &
@@ -53,7 +53,7 @@ done
 
 count2= ps -ef | grep registry | grep -v "grep" | wc -l
 
-if [ 0 -eq count2  || ! $count2 ]
+if [ 0 -eq count2  || [ -z $count2 ]  ]
 then
    echo 注册中心启动失败....，部署中断
    exit 1
@@ -64,7 +64,7 @@ count1= ps -ef | grep connfigserver | grep -v "grep" | wc -l
 
 for var in 1 2 3
   do
-  if [ 0 -eq count1  || ! $count1 ]
+  if [ 0 -eq count1  || [ -z $count1 ] ]
     then
        echo "开始启动配置服务"
        nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/configserver-SNAPSHOT.jar  >>${base_dir}/configserver.log 2>&1 &
@@ -79,7 +79,7 @@ done
 
 for var in 1 2 3
 do
- if [ 0 -eq $count1 || ! $$count1 ]
+ if [ 0 -eq $count1 || [ -z $count1 ] ]
  then
     echo 正在启动各项服务，等待中....
     #启动用户服务
