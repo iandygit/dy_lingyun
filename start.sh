@@ -1,22 +1,27 @@
 #!/bin/bash
 
 base_dir=/opt/lingyun/deploy
-echo "---------------------------------------------------------"
+
 echo "显示CPU信息"
+
 echo $(cat /proc/cpuinfo | grep 'model name')
-echo "---------------------------------------------------------"
+
 echo "显示系统负载情况"
+
 echo $(uptime)
-echo "---------------------------------------------------------"
+
 echo "显示交换分区swap的情况"
+
 echo $(free | grep wap)
-echo "---------------------------------------------------------"
+
 echo "显示系统挂载点信息"
+
 echo $(df -hT | grep 'boot')
-echo "---------------------------------------------------------"
+
 echo "显示网卡信息"
+
 echo $(ip addr show ens33 | grep "inet ")
-echo "---------------------------------------------------------"
+
 
 #杀死所有服务进程
 ps -ef | grep registry | grep -v grep | awk '{print $2}' | xargs kill -9
@@ -28,7 +33,7 @@ ps -ef | grep gateway | grep -v grep | awk '{print $2}' | xargs kill -9
 
 
 #启动注册中心
-count=^ps -ef | grep registry | grep -v "grep" | wc -l^
+count= ps -ef | grep registry | grep -v "grep" | wc -l
 
 sec=7
 for var in 1 2 3
@@ -46,7 +51,7 @@ do
  fi
 done
 
-count2=^ps -ef | grep registry | grep -v "grep" | wc -l^
+count2= ps -ef | grep registry | grep -v "grep" | wc -l
 
 if [ 0 -eq count2 || ! $count2 ]
 then
@@ -55,7 +60,7 @@ then
 fi
 
 
-count1=^ps -ef | grep connfigserver | grep -v "grep" | wc -l^
+count1= ps -ef | grep connfigserver | grep -v "grep" | wc -l
 
 for var in 1 2 3
   do
