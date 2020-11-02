@@ -53,5 +53,23 @@
         SpringApplication.run(UserAuthApplication.class);
     }
 ```  
-3、工控加商城 
+3、服务部署
+
+  先检查服务是否启动
+  
+  ```
+  ps -ef|grep java 
+  ```
+  
+  然后手动关闭，执行脚本（根据id杀死进程，PID对应进程id那个数值）
+  ```
+  kill -9 PID
+  ```
+  启动服务，进入相应的目录，执行启动脚本
+  
+  ```
+  nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/configserver-SNAPSHOT.jar  >>${base_dir}/configserver.log 2>&1 &
+  ```
+  
+4、工控加商城 
 ![工控加商城](https://51gkp-static.oss-cn-beijing.aliyuncs.com/normal/97E77B80CA2F47DB8CBBDA5EA73E2B15.jpeg)  
