@@ -37,7 +37,7 @@
   
  网关中心服务         |   [`gateway`  ](gateway)
 
-## 代码解释
+## 4、 代码解释
 1、springboot启动类注解 
 
 `@SpringBootApplication`
@@ -54,7 +54,7 @@
         SpringApplication.run(UserAuthApplication.class);
     }
 ```  
-3、服务部署
+## 5、服务部署
 
   先检查服务是否启动
   
