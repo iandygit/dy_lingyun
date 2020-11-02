@@ -70,6 +70,3 @@
   ```
   nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/configserver-SNAPSHOT.jar  >>${base_dir}/configserver.log 2>&1 &
   ```
-  
-4、工控加商城 
-![工控加商城](https://51gkp-static.oss-cn-beijing.aliyuncs.com/normal/97E77B80CA2F47DB8CBBDA5EA73E2B15.jpeg)  
