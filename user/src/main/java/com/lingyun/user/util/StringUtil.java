@@ -1126,12 +1126,9 @@ public class StringUtil {
        }
    }
     public  static void main(String args[]){
-        String password="70fe54912640929f191d61abbdb55115:q" +
-                ":";
-        StringUtil.Member member =new StringUtil().new Member();
-        member.setUname("json");
-
-        String pwdmd5 = StringUtil.md5(password + member.getUname().toLowerCase());
+        String password="!@#$%^&*(asdqwer";
+        String usernamee="adminstrator_110";
+        String pwdmd5 = StringUtil.md5(password + usernamee.toLowerCase());
 
        System.out.println(pwdmd5);
     }
