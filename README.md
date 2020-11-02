@@ -68,5 +68,5 @@
   启动服务，进入相应的目录，执行启动脚本
   
   ```
-  nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/configserver-SNAPSHOT.jar  >>${base_dir}/configserver.log 2>&1 &
+  nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/configserver-SNAPSHOT.jar  >>$base_dir/configserver.log 2>&1 &
   ```
