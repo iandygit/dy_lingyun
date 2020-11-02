@@ -23,8 +23,9 @@
 
 `Eureka` `configserver` `config` `spring-data-jpa` `Druid` `jwt` `token` `oauth2`
 
-##代码架构
-注册中心服务      |  [ `registry`  ](registry/)
+## 3、代码架构
+
+ 注册中心服务      |  [ `registry`  ](registry/)
 
  配置中心服务    |    [`configserver`](configserver)
  
@@ -45,7 +46,7 @@
 
 `@EnableEurekaClient`
 
-2、代码块高亮  
+2、启动类  
 ```
  public static void  main(String args[]){
 
