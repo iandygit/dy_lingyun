@@ -79,7 +79,7 @@ public class PoundEntity implements Serializable {
      * EnumType:  ORDINAL 枚举序数  默认选项（int）。eg:入库 数据库存储的是 0
      *            STRING：枚举名称       (String)。eg:入库 数据库存储的是 "入库"
      */
-    private PoundEnum flowTo=PoundEnum.IN;;
+    private PoundEnum flowTo;
 
     @ApiModelProperty("磅房号")
     private String poundAccount;
