@@ -40,6 +40,35 @@ public class OrgSeviceImpl implements OrgSevice {
     }
 
     @Override
+    public String saveOrg(OrganizationEntity organizationEntity) {
+        if(null== organizationEntity.getId() ||organizationEntity.getId()==0){//插入操作
+            OrganizationEntity resultEntity=orgRepository.findByOrgName(organizationEntity.getOrgName());
+            if(null==resultEntity){//名称不存在可以插入
+
+                OrganizationEntity org= orgRepository.save(organizationEntity);
+                if(null ==org){
+                    return "操作失败";
+                }
+                 return "操作成功";
+            }
+        }else {//更新操作
+
+            OrganizationEntity optional=orgRepository.findByIdAndOrgName(organizationEntity.getId(),organizationEntity.getOrgName());
+            if(null==optional){
+                return "实体不存在，请检查数据是否合法";
+            }
+            //名称不允许重复
+            organizationEntity.setOrgName(optional.getOrgName());//名称不允许修改
+            OrganizationEntity res=orgRepository.saveAndFlush(organizationEntity);
+            if(null!=res){
+                return "操作成功";
+            }
+            return "操作失败";
+        }
+        return "操作成功";
+    }
+
+    @Override
     public OrganizationEntity save(OrganizationEntity organizationEntity) {
 
         return orgRepository.saveAndFlush(organizationEntity);

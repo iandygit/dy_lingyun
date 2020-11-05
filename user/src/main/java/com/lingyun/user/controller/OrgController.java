@@ -1,5 +1,7 @@
 package com.lingyun.user.controller;
 
+import com.lingyun.core.beans.LoginUser;
+
 import com.lingyun.user.entity.OrganizationEntity;
 import com.lingyun.user.service.OrgSevice;
 import io.swagger.annotations.Api;
@@ -87,9 +89,9 @@ public class OrgController {
     @RequestMapping(value = "/{orgName}", method = RequestMethod.POST)
     @ApiOperation(value = "添加/编辑矿区", notes = "添加/编辑矿区", tags = "矿区管理")
     public  ResponseEntity<String> savee(OrganizationEntity organizationEntity){
-          orgSevice.save(organizationEntity);
+        String org=orgSevice.saveOrg(organizationEntity);
 
-         return ResponseEntity.ok("操作成功");
+            return ResponseEntity.ok(org);
     }
 
 

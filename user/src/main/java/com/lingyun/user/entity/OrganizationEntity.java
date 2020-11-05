@@ -3,6 +3,8 @@ package com.lingyun.user.entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -16,6 +18,9 @@ import java.io.Serializable;
 @Table(name ="t_organization")
 @Entity
 @ApiModel(description = "矿区实体类")
+@DynamicInsert
+@DynamicUpdate
+@Data
 public class OrganizationEntity implements Serializable {
 
 
