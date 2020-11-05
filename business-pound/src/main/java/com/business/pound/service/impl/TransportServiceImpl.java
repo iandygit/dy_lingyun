@@ -22,7 +22,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
-import com.lingyun.core.exception.ValidateCodeException;
+import com.business.pound.exception.ValidateCodeException;
 @Service
 public class TransportServiceImpl implements TransportService {
     @PersistenceContext
