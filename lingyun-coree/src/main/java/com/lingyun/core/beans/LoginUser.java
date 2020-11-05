@@ -1,4 +1,4 @@
-package com.lingyun.beans;
+package com.lingyun.core.beans;
 
 public class LoginUser {
     public Object userToken;

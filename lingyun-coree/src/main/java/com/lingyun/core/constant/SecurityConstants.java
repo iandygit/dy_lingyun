@@ -16,7 +16,7 @@
  *
  */
 
-package com.lingyun.constant;
+package com.lingyun.core.constant;
 
 /**
  * @author lengleng

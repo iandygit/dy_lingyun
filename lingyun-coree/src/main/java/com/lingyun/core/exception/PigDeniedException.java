@@ -16,19 +16,33 @@
  *
  */
 
-package com.lingyun.exception;
+package com.lingyun.core.exception;
+
+import lombok.NoArgsConstructor;
 
 /**
  * @author lengleng
- * @date 2018年06月22日16:22:15
+ * @date 2018年06月22日16:22:03
+ * 403 授权拒绝
  */
-public class ValidateCodeException extends RuntimeException {
-	private static final long serialVersionUID = -7285211528095468156L;
+@NoArgsConstructor
+public class PigDeniedException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
 
-	public ValidateCodeException() {
+	public PigDeniedException(String message) {
+		super(message);
 	}
 
-	public ValidateCodeException(String msg) {
-		super(msg);
+	public PigDeniedException(Throwable cause) {
+		super(cause);
 	}
+
+	public PigDeniedException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+	public PigDeniedException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
 }

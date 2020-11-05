@@ -16,9 +16,9 @@
  *
  */
 
-package com.lingyun.util;
+package com.lingyun.core.util;
 
-import com.lingyun.constant.CommonConstants;
+import com.lingyun.core.constant.CommonConstants;
 import lombok.*;
 import lombok.experimental.Accessors;
 

@@ -1,4 +1,4 @@
-package com.lingyun.util;
+package com.lingyun.core.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

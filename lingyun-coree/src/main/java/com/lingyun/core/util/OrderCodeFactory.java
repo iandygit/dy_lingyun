@@ -1,4 +1,4 @@
-package com.lingyun.util;
+package com.lingyun.core.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

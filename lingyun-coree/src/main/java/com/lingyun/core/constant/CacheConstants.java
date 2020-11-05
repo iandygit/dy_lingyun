@@ -16,78 +16,51 @@
  *
  */
 
-package com.lingyun.constant;
+package com.lingyun.core.constant;
 
 /**
  * @author lengleng
- * @date 2019/2/1
+ * @date 2020年01月01日
+ * <p>
+ * 缓存的key 常量
  */
-public interface CommonConstants {
-	/**
-	 * 删除
-	 */
-	String STATUS_DEL = "1";
-	/**
-	 * 正常
-	 */
-	String STATUS_NORMAL = "0";
+public interface CacheConstants {
 
 	/**
-	 * 锁定
+	 * oauth 缓存前缀
 	 */
-	String STATUS_LOCK = "9";
-
-	/**
-	 * 菜单树根节点
-	 */
-	Integer MENU_TREE_ROOT_ID = -1;
-
-	/**
-	 * 菜单
-	 */
-	String MENU = "0";
-
-	/**
-	 * 编码
-	 */
-	String UTF8 = "UTF-8";
-
-	/**
-	 * JSON 资源
-	 */
-	String CONTENT_TYPE = "application/json; charset=utf-8";
-
-	/**
-	 * 前端工程名
-	 */
-	String FRONT_END_PROJECT = "pig-ui";
-
-	/**
-	 * 后端工程名
-	 */
-	String BACK_END_PROJECT = "pig";
-
-	/**
-	 * 成功标记
-	 */
-	Integer SUCCESS = 0;
-	/**
-	 * 失败标记
-	 */
-	Integer FAIL = 1;
+	String PROJECT_OAUTH_ACCESS = "pig_oauth:access:";
 
 	/**
 	 * 验证码前缀
 	 */
-	String DEFAULT_CODE_KEY = "DEFAULT_CODE_KEY_";
+	String DEFAULT_CODE_KEY = "DEFAULT_CODE_KEY:";
+
 
 	/**
-	 * 当前页
+	 * 菜单信息缓存
 	 */
-	String CURRENT = "current";
+	String MENU_DETAILS = "menu_details";
 
 	/**
-	 * size
+	 * 用户信息缓存
 	 */
-	String SIZE = "size";
+	String USER_DETAILS = "user_details";
+
+	/**
+	 * 字典信息缓存
+	 */
+	String DICT_DETAILS = "dict_details";
+
+
+	/**
+	 * oauth 客户端信息
+	 */
+	String CLIENT_DETAILS_KEY = "pig_oauth:client:details";
+
+
+	/**
+	 * 参数缓存
+	 */
+	String PARAMS_DETAILS = "params_details";
 }

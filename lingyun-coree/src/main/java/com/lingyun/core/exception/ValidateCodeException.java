@@ -16,22 +16,19 @@
  *
  */
 
-package com.lingyun.constant;
+package com.lingyun.core.exception;
 
 /**
  * @author lengleng
- * @date 2018年06月22日16:41:01
- * 服务名称
+ * @date 2018年06月22日16:22:15
  */
-public interface ServiceNameConstants {
-	/**
-	 * 认证服务的SERVICEID
-	 */
-	String AUTH_SERVICE = "pig-auth";
+public class ValidateCodeException extends RuntimeException {
+	private static final long serialVersionUID = -7285211528095468156L;
 
-	/**
-	 * UMPS模块
-	 */
-	String UMPS_SERVICE = "pig-upms-biz";
+	public ValidateCodeException() {
+	}
 
+	public ValidateCodeException(String msg) {
+		super(msg);
+	}
 }

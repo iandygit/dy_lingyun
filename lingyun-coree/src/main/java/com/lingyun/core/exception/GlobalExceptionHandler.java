@@ -16,9 +16,9 @@
  *
  */
 
-package com.lingyun.exception;
+package com.lingyun.core.exception;
 
-import com.lingyun.util.R;
+import com.lingyun.core.util.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;

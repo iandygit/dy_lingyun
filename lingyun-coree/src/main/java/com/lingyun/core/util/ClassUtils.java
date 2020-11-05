@@ -16,7 +16,7 @@
  *
  */
 
-package com.lingyun.util;
+package com.lingyun.core.util;
 
 import lombok.experimental.UtilityClass;
 import org.springframework.core.BridgeMethodResolver;
