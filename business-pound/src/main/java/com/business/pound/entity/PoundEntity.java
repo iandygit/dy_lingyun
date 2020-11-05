@@ -35,6 +35,9 @@ public class PoundEntity implements Serializable {
     @ApiModelProperty("货物编号")
     private String goodsNum;
 
+    @ApiModelProperty("运单号")
+    private String transportNum;
+
     @ApiModelProperty("货物名称")
     private String goodsName;
 

@@ -47,8 +47,11 @@ public class StatisAnalysisController {
         List<Double> values=new ArrayList<>();
         List<String> colums=new ArrayList<>();
         for (Object[] objects:mapList){
-
-            values.add(Double.valueOf(objects[0].toString()));
+            if(null==objects[0]){
+                values.add(Double.valueOf(-1L));
+            }else {
+                values.add(Double.valueOf(objects[0].toString()));
+            }
             colums.add(objects[1].toString());
         }
         jsonObject.put("categoriees",colums);
