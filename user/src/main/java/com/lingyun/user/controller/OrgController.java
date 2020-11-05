@@ -1,7 +1,5 @@
 package com.lingyun.user.controller;
 
-import com.lingyun.core.beans.LoginUser;
-
 import com.lingyun.user.entity.OrganizationEntity;
 import com.lingyun.user.service.OrgSevice;
 import io.swagger.annotations.Api;
