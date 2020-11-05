@@ -50,6 +50,8 @@ public class OrgSeviceImpl implements OrgSevice {
                     return "操作失败";
                 }
                  return "操作成功";
+            }else {
+                return "名称重复";
             }
         }else {//更新操作
 
@@ -65,7 +67,6 @@ public class OrgSeviceImpl implements OrgSevice {
             }
             return "操作失败";
         }
-        return "操作成功";
     }
 
     @Override
