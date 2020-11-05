@@ -12,6 +12,11 @@
     <artifactId>business-pound</artifactId>
 
 <dependencies>
+    <dependency>
+        <groupId>com.lingyun</groupId>
+        <artifactId>core</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
     <!-- Druid -->
     <dependency>
         <groupId>com.alibaba</groupId>

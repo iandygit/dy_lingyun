@@ -10,20 +10,19 @@ import com.business.pound.util.OrderCodeFactory;
 import com.business.pound.util.PoundEnum;
 import com.business.pound.util.TransportEnum;
 import com.business.pound.vo.PoundTransVo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
+import com.lingyun.core.exception.ValidateCodeException;
 @Service
 public class TransportServiceImpl implements TransportService {
     @PersistenceContext
@@ -90,27 +89,42 @@ public class TransportServiceImpl implements TransportService {
     @Override
     @Transactional
     public int apporval(String[] ids, String status) {
-
+        String cartNum="";
+        TransportEnetity transportEnetity=new TransportEnetity();
+        String transNum=OrderCodeFactory.getTransCode(1L);
          for(int i=0;i<ids.length;i++){
-             TransportEnetity transportEnetity=new TransportEnetity();
+
              Long idV=Long.valueOf(ids[i]);
-             transportEnetity.setPoundId(idV);
+             //transportEnetity.setPoundId(idV);
 
              PoundEntity poundEntity=poundRepository.getOne(idV);
-             if(null==poundEntity ||null== poundEntity.getId()){
+
+             if(null==poundEntity ||null== poundEntity.getId()){//找不到数据
+
                  continue;
              }
-             transportEnetity.setPoundNum(poundEntity.getPoundNum());
-             transportEnetity.setPoundAccount(poundEntity.getPoundAccount());
+             if(StringUtils.isEmpty(cartNum)){
+                 cartNum=poundEntity.getCarNum();
+             }else {
+                 if(!cartNum.equals(poundEntity.getCarNum())){//不是同一个车的审批，放弃
 
-             transportEnetity.setStatus(TransportEnum.A);
-
-             String transNum=OrderCodeFactory.getTransCode(1L);
-             transportEnetity.setTransportNum(transNum);
-
-             transportRepository.save(transportEnetity);
+                     throw new ValidateCodeException("车号不同，请检查数据合法性");
+                     //continue;
+                 }
+             }
              poundEntity.setPoundStatus(PoundEnum.valueOf(status));//审批结果
+             poundEntity.setTransportNum(transNum);
+
+             transportEnetity.setPoundAccount(poundEntity.getPoundAccount());
         }
+        //transportEnetity.setPoundNum(poundEntity.getPoundNum());
+
+
+        transportEnetity.setStatus(TransportEnum.A);
+
+        transportEnetity.setTransportNum(transNum);
+
+        transportRepository.save(transportEnetity);
         return 1;
     }
 }
