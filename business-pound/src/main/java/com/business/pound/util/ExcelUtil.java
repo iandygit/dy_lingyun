@@ -8,6 +8,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 public class ExcelUtil {
@@ -49,8 +50,11 @@ public class ExcelUtil {
             output = response.getOutputStream();
             response.reset();
             response.setCharacterEncoding("utf-8");
-            response.setHeader("Content-disposition", "attachment; filename="+fileNamee+".xls");
-            response.setContentType("application/msexcel");
+            response.setHeader("Content-disposition", "attachment; filename="+ fileNamee +".xls");
+            response.setContentType("application/msexcel;charset=UTF-8");
+            response.setHeader("Pragma", "no-cache");
+            response.setHeader("Cache-Control", "no-cache");
+            response.setDateHeader("Expires", 0);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -12,21 +12,23 @@ import java.util.List;
 
 public interface TransportRepository  extends JpaRepository<TransportEnetity,Long> {
 
-
-    @Query(value = "select new  com.business.pound.vo.PoundTransVo(t.id,t.poundId,t.transportNum,t.poundNum,p.carNum,p.goodsName,p.reciveUnit,p.deliverUnit,p.weight," +
-            "p.tareWeight,p.netWeight,p.poundWeight,p.flowTo,p.poundAccount) from TransportEnetity t left join PoundEntity p on t.poundId=p.id where t.transportNum=:transportNum")
+    //运单列表数据分页
+    @Query(value = "select new  com.business.pound.vo.PoundTransVo(t.id,p.id,t.transportNum,t.poundNum,p.carNum,p.goodsName,p.reciveUnit,p.deliverUnit,p.weight," +
+            "p.tareWeight,p.netWeight,p.poundWeight,p.flowTo,p.poundAccount) from PoundEntity p left join  TransportEnetity t on p.transportNum=t.transportNum where t.transportNum=:transportNum and p.transportNum is not null")
     public Page<PoundTransVo>  findAllTransport(@Param("transportNum") String transportNum, Pageable pageable);
 
-    @Query(value = "select new  com.business.pound.vo.PoundTransVo(t.id,t.poundId,t.transportNum,t.poundNum,p.carNum,p.goodsName,p.reciveUnit,p.deliverUnit,p.weight," +
-            "p.tareWeight,p.netWeight,p.poundWeight,p.flowTo,p.poundAccount) from TransportEnetity t left join PoundEntity p on t.poundId=p.id ")
+    //运单列表数据分页
+    @Query(value = "select new  com.business.pound.vo.PoundTransVo(t.id,p.id,t.transportNum,t.poundNum,p.carNum,p.goodsName,p.reciveUnit,p.deliverUnit,p.weight," +
+            "p.tareWeight,p.netWeight,p.poundWeight,p.flowTo,p.poundAccount) from PoundEntity p left join  TransportEnetity t on p.transportNum=t.transportNum where p.transportNum is not null ")
     public Page<PoundTransVo>  findAllTransport(Pageable pageable);
 
-    @Query(value = "select new  com.business.pound.vo.PoundTransVo(t.id,t.poundId,t.transportNum,t.poundNum,p.carNum,p.goodsName,p.reciveUnit,p.deliverUnit,p.weight," +
-            "p.tareWeight,p.netWeight,p.poundWeight,p.flowTo,t.poundAccount) from TransportEnetity t left join PoundEntity p on t.poundId=p.id where (:transportNum is null  or t.transportNum=:transportNum)")
+    //运单记录导出
+    @Query(value = "select new  com.business.pound.vo.PoundTransVo(t.id,p.id,t.transportNum,t.poundNum,p.carNum,p.goodsName,p.reciveUnit,p.deliverUnit,p.weight," +
+            "p.tareWeight,p.netWeight,p.poundWeight,p.flowTo,t.poundAccount) from PoundEntity p left join  TransportEnetity t on p.transportNum=t.transportNum where (p.transportNum is not null) and (:transportNum is null  or t.transportNum=:transportNum)")
     public List<PoundTransVo> findAllList(@Param("transportNum")String transportNum );
-
-    @Query(value = "select new  com.business.pound.vo.PoundTransVo(t.id,t.poundId,t.transportNum,t.poundNum,p.carNum,p.goodsName,p.reciveUnit,p.deliverUnit,p.weight," +
-            "p.tareWeight,p.netWeight,p.poundWeight,p.flowTo,t.poundAccount) from TransportEnetity t left join PoundEntity p on t.poundId=p.id ")
+    //运单记录导出
+    @Query(value = "select new  com.business.pound.vo.PoundTransVo(t.id,p.id,t.transportNum,t.poundNum,p.carNum,p.goodsName,p.reciveUnit,p.deliverUnit,p.weight," +
+            "p.tareWeight,p.netWeight,p.poundWeight,p.flowTo,t.poundAccount) from PoundEntity p left join  TransportEnetity t on p.transportNum=t.transportNum where p.transportNum is not null ")
     public List<PoundTransVo> findAllList();
 
 }
