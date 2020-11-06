@@ -71,7 +71,7 @@
   ```
   nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/configserver-SNAPSHOT.jar  >>$base_dir/configserver.log 2>&1 &
   ```
-  ## swagger 访问地址
+  ## 6、swagger 访问地址
   
   ```
   
