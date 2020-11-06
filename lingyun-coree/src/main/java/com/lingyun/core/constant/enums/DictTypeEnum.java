@@ -16,7 +16,7 @@
  *
  */
 
-package com.lingyun.constant.enums;
+package com.lingyun.core.constant.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
