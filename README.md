@@ -71,3 +71,10 @@
   ```
   nohup java -Xmx256m -Xms128m -Xss256k -jar $base_dir/configserver-SNAPSHOT.jar  >>$base_dir/configserver.log 2>&1 &
   ```
+  ## swagger 访问地址
+  
+  ```
+  
+  http://123.57.160.227:8801/swagger-ui.html
+  
+  ```
