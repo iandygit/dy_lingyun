@@ -35,6 +35,9 @@ public class TransportEnetity {
     @ApiModelProperty("磅单号")
     private String poundNum;
 
+    @ApiModelProperty("汽车号")
+    private String carNum;
+
     @ApiModelProperty("货物名称")
     private String goodsName;
 
