@@ -92,6 +92,10 @@ public class TransportServiceImpl implements TransportService {
         String cartNum="";
         TransportEnetity transportEnetity=new TransportEnetity();
         String transNum=OrderCodeFactory.getTransCode(1L);
+        double  weight=0.0;//毛重
+        double  tareWeight=0.0;//皮重
+        double  netWeight=0.0;//净重
+
          for(int i=0;i<ids.length;i++){
 
              Long idV=Long.valueOf(ids[i]);
@@ -115,6 +119,46 @@ public class TransportServiceImpl implements TransportService {
              poundEntity.setPoundStatus(PoundEnum.valueOf(status));//审批结果
              poundEntity.setTransportNum(transNum);
 
+             transportEnetity.setGoodsName(poundEntity.getGoodsName());//货物名称
+             transportEnetity.setReciveUnit(poundEntity.getReciveUnit());//收货单位
+             transportEnetity.setDeliverUnit(poundEntity.getDeliverUnit());//发货单位
+
+             if(ids.length==1){
+                 transportEnetity.setWeight(poundEntity.getWeight());//毛重
+                 transportEnetity.setTareWeight(poundEntity.getTareWeight());//皮重
+                 transportEnetity.setNetWeight(poundEntity.getWeight()-poundEntity.getTareWeight());//净重
+             }else {
+                  if(null!=poundEntity.getWeight()){
+                      weight=poundEntity.getWeight();
+                  }
+                   if(null != poundEntity.getTareWeight()){
+                       tareWeight=poundEntity.getTareWeight();
+                   }
+                  if(i>0){//第二条数据
+                      /******
+                       * 如果两个磅单分别提供了毛重和皮重，则分别存入运单的毛重和皮重字段，
+                       * 并且用毛重-皮重得出净重计入运单；
+                       * 如果两个磅单都提供了毛重字段[或其他重量字段]，
+                       * 那么，用这两个数量做比较，大的作为毛重存入运单，
+                       * 小的作为皮重存入运单，用上面的公式计算净重存入运单*
+                       * *********/
+                      if(weight>poundEntity.getWeight()){
+                          transportEnetity.setWeight(weight);//毛重
+                          transportEnetity.setTareWeight(poundEntity.getWeight());//皮重
+                          transportEnetity.setNetWeight(weight-poundEntity.getWeight());
+                      }else if (weight==poundEntity.getWeight()){
+                          transportEnetity.setWeight(poundEntity.getWeight());//毛重
+                          transportEnetity.setTareWeight(poundEntity.getTareWeight());//皮重
+                          transportEnetity.setNetWeight(poundEntity.getWeight()-poundEntity.getTareWeight());//净重
+
+                      }else{
+                          transportEnetity.setWeight(poundEntity.getWeight());//毛重
+                          transportEnetity.setWeight(weight);//皮重
+                          transportEnetity.setNetWeight(poundEntity.getWeight()-weight);//净重
+                      }
+
+                  }
+             }
              transportEnetity.setPoundAccount(poundEntity.getPoundAccount());
         }
         //transportEnetity.setPoundNum(poundEntity.getPoundNum());
@@ -126,5 +170,14 @@ public class TransportServiceImpl implements TransportService {
 
         transportRepository.save(transportEnetity);
         return 1;
+    }
+
+    @Override
+    public Page<TransportEnetity> findAll(String transportNum, Pageable pageable) {
+         if(StringUtils.isEmpty(transportNum)){
+             return transportRepository.findAll(pageable);
+         }
+        return transportRepository.findAllByTransportNum(transportNum,pageable);
+
     }
 }

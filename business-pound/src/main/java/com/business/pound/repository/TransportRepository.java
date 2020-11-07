@@ -31,4 +31,6 @@ public interface TransportRepository  extends JpaRepository<TransportEnetity,Lon
             "p.tareWeight,p.netWeight,p.poundWeight,p.flowTo,t.poundAccount) from PoundEntity p left join  TransportEnetity t on p.transportNum=t.transportNum where p.transportNum is not null ")
     public List<PoundTransVo> findAllList();
 
+
+    public Page<TransportEnetity> findAllByTransportNum(String transportNum,Pageable pageable);
 }

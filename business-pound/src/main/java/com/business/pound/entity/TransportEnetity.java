@@ -35,6 +35,25 @@ public class TransportEnetity {
     @ApiModelProperty("磅单号")
     private String poundNum;
 
+    @ApiModelProperty("货物名称")
+    private String goodsName;
+
+    @ApiModelProperty("收货单位")
+    private String reciveUnit;
+
+    @ApiModelProperty("发货单位")
+    private String deliverUnit;
+
+    @ApiModelProperty("毛重")
+    private Double weight;
+
+    @ApiModelProperty("皮重")
+    private Double tareWeight;
+
+    @ApiModelProperty("净重")
+    private Double netWeight;
+
+
     @Convert(converter = TransportEnum.Converter.class)
     @ApiModelProperty("状态")
     private TransportEnum status= TransportEnum.A;
