@@ -1,5 +1,6 @@
 package com.business.pound.entity;
 
+import com.business.pound.util.PoundEnum;
 import com.business.pound.util.TransportEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -60,7 +61,14 @@ public class TransportEnetity {
     @Convert(converter = TransportEnum.Converter.class)
     @ApiModelProperty("状态")
     private TransportEnum status= TransportEnum.A;
-
+    @Convert(converter = PoundEnum.Converter.class)
+    @ApiModelProperty("流向/入库，出库")
+    //@Enumerated(EnumType.ORDINAL)
+    /**
+     * EnumType:  ORDINAL 枚举序数  默认选项（int）。eg:入库 数据库存储的是 0
+     *            STRING：枚举名称       (String)。eg:入库 数据库存储的是 "入库"
+     */
+    private PoundEnum flowTo;
 
     @CreatedDate
     @Column(updatable = false, nullable = false)

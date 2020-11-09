@@ -57,14 +57,14 @@ public class TransportController {
     }
 
 
-    @RequestMapping(value = "/bound",method = RequestMethod.GET)
+    @RequestMapping(value = "/bound/{transportNum}",method = RequestMethod.GET)
     @ApiOperation(value = "运单+磅单列表数据分页",tags = "运单管理")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "transportNum",value = "运单号号",dataType = "java.lang.String"),
             @ApiImplicitParam(name = "pageNumber",value = "当前页数，不传递默认是1"),
             @ApiImplicitParam(name = "pageSize",value = "每页显示大小，不传递默认是20")
     })
-    public ResponseEntity<Page<PoundTransVo>> allBound(String transportNum, Integer pageNumber, Integer pageSize){
+    public ResponseEntity<Page<PoundTransVo>> allBound(@PathVariable("transportNum") String transportNum, Integer pageNumber, Integer pageSize){
          if(null==pageNumber ||pageNumber==0){
              pageNumber=0;
          }else {

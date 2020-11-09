@@ -123,6 +123,12 @@ public class TransportServiceImpl implements TransportService {
              transportEnetity.setReciveUnit(poundEntity.getReciveUnit());//收货单位
              transportEnetity.setDeliverUnit(poundEntity.getDeliverUnit());//发货单位
              transportEnetity.setCarNum(poundEntity.getCarNum());//汽车号
+             if(null==poundEntity.getFlowTo()){
+                 transportEnetity.setFlowTo(PoundEnum.OPT_E);
+             }else {
+                 transportEnetity.setFlowTo(poundEntity.getFlowTo());//货物流向
+             }
+
              if(ids.length==1){
 
                  transportEnetity.setWeight(poundEntity.getWeight());//毛重

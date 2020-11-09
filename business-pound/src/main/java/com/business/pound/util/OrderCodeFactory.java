@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public class OrderCodeFactory {
     /** 运单号 */
-    private static final String TRANS_CODE = "LINGYUN_";
+    private static final String TRANS_CODE = "LY_";
     /** 订单类别头 */
     private static final String ORDER_CODE = "1";
     /** 退货类别头 */

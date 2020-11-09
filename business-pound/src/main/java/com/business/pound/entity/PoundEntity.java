@@ -4,6 +4,7 @@ import com.business.pound.util.PoundEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -88,6 +89,7 @@ public class PoundEntity implements Serializable {
     private String poundAccount;
 
     @ApiModelProperty("创建时间")
+    @CreatedDate
     private String createTime;
 
     @Convert(converter = PoundEnum.Converter.class)
