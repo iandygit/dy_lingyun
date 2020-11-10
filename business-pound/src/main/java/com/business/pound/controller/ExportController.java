@@ -62,8 +62,8 @@ public class ExportController {
         List list=new ArrayList();
 
 
-        for(int i=0 ;i<poundEntities.size();i++){
-
+        //for(int i=0 ;i<poundEntities.size();i++){
+        for(int i=poundEntities.size()-1 ;i>-1;i--){
             PoundEntity poundEntity=  poundEntities.get(i);
             String result[]=new String[cloumns.length];
 
