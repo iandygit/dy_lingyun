@@ -55,7 +55,9 @@ public class ExportController {
 
         String cloumns[]=new String []{"磅房号","磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","磅单状态"};
 
-
+        if(poundEntities.size()==0){
+            return null;
+        }
 
         List list=new ArrayList();
 
@@ -115,9 +117,11 @@ public class ExportController {
 
         List list=new ArrayList();
 
-
-        for(int i=0 ;i<page.getContent().size();i++){
-
+        if(page.getContent().size()==0){
+            return null;
+        }
+        //for(int i=0 ;i<page.getContent().size();i++){
+        for(int i=page.getContent().size()-1 ;i>-1;i--){
             TransportEnetity transportEnetityEntity=  page.getContent().get(i);
             String result[]=new String[cloumns.length];
             result[0]=transportEnetityEntity.getTransportNum();//运单号
