@@ -120,7 +120,6 @@ public class ExportController {
         if(page.getContent().size()==0){
             return null;
         }
-        //for(int i=0 ;i<page.getContent().size();i++){
         for(int i=page.getContent().size()-1 ;i>-1;i--){
             TransportEnetity transportEnetityEntity=  page.getContent().get(i);
             String result[]=new String[cloumns.length];
