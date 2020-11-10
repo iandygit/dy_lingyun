@@ -111,7 +111,7 @@ public class ExportController {
 
          Page<TransportEnetity> page=transportService.findAll(transportNum,pageable);
          //List<PoundTransVo> transportEnetity= transportService.findAllList(transportNum);
-         String cloumns[]=new String []{"运单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","磅房号"};
+         String cloumns[]=new String []{"运单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","磅房号"};
 
         List list=new ArrayList();
 
@@ -129,12 +129,12 @@ public class ExportController {
             result[5]=String.valueOf(transportEnetityEntity.getWeight());//毛重
             result[6]=String.valueOf(transportEnetityEntity.getTareWeight());//皮重
             result[7]=String.valueOf(transportEnetityEntity.getNetWeight());//净重
-            if(null!=transportEnetityEntity.getFlowTo()){
+            /*if(null!=transportEnetityEntity.getFlowTo()){
                 result[8]=transportEnetityEntity.getFlowTo().getDesc();//货物流向
             }else {
                 result[8]="未知";
-            }
-            result[9]=transportEnetityEntity.getPoundAccount();//磅房号
+            }*/
+            result[8]=transportEnetityEntity.getPoundAccount();//磅房号
             list.add(result);
         }
 
