@@ -11,7 +11,6 @@ public class PropertiesListener implements ApplicationListener<ApplicationStarte
         this.propertyFileName = propertyFileName;
     }
 
-    @Override
     public void onApplicationEvent(ApplicationStartedEvent event) {
         PropertiesListenerConfig.loadAllProperties(propertyFileName);
     }
