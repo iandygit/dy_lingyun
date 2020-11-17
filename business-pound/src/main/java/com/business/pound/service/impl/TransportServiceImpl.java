@@ -94,7 +94,7 @@ public class TransportServiceImpl implements TransportService {
         String transNum=OrderCodeFactory.getTransCode(1L);
         double  weight=0.0;//毛重
         double  tareWeight=0.0;//皮重
-        double  netWeight=0.0;//净重
+        //double  netWeight=0.0;//净重
 
          for(int i=0;i<ids.length;i++){
 
@@ -135,13 +135,14 @@ public class TransportServiceImpl implements TransportService {
                  transportEnetity.setTareWeight(poundEntity.getTareWeight());//皮重
                  transportEnetity.setNetWeight(poundEntity.getWeight()-poundEntity.getTareWeight());//净重
              }else {
-                  if(null!=poundEntity.getWeight()){//毛重
-                      weight=poundEntity.getWeight();
-                  }
-                   if(null != poundEntity.getTareWeight()){//皮重
-                       tareWeight=poundEntity.getTareWeight();
-                   }
-
+                 if(i==0){//第一条数据
+                     if(null!=poundEntity.getWeight()){//毛重
+                         weight=poundEntity.getWeight();
+                     }
+                     if(null != poundEntity.getTareWeight()){//皮重
+                         tareWeight=poundEntity.getTareWeight();
+                     }
+                 }
                   if(i>0){//第二条数据
                       /******
                        * 如果两个磅单分别提供了毛重和皮重，则分别存入运单的毛重和皮重字段，
