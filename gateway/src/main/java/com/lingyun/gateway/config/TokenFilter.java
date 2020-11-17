@@ -1,7 +1,6 @@
 package com.lingyun.gateway.config;
 
 import com.lingyun.core.util.KeyTools;
-import com.lingyun.core.util.SignTools;
 import com.lingyun.core.util.VerifyTools;
 import com.lingyun.gateway.service.FeignService;
 import com.lingyun.gateway.utils.JwtTokenUtil;
