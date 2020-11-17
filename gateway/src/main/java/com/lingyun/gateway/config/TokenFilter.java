@@ -1,5 +1,8 @@
 package com.lingyun.gateway.config;
 
+import com.lingyun.core.util.KeyTools;
+import com.lingyun.core.util.SignTools;
+import com.lingyun.core.util.VerifyTools;
 import com.lingyun.gateway.service.FeignService;
 import com.lingyun.gateway.utils.JwtTokenUtil;
 import io.jsonwebtoken.Claims;
@@ -25,6 +28,8 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -42,8 +47,8 @@ public class TokenFilter implements GlobalFilter, Ordered {
 
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
-        response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
-
+        //response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
+        response.getHeaders().add("characterEncoding","utf-8");
         // 获取当前请求路径
         String url = request.getURI().getPath();
         //从请求头中取得token
@@ -63,20 +68,54 @@ public class TokenFilter implements GlobalFilter, Ordered {
            }else {
                // 令牌正常解析，为了方便在其他微服务进行认证，这里将jwt放入到请求头中
                request.mutate().header("Authorization", token);
-               logger.info("放行......."+url);
+
                // 放行
                return chain.filter(exchange);
            }
         }
         //跳过不需要验证的路径
         if(null != skipAuthUrls&& Arrays.asList(skipAuthUrls).contains(url)){
-            logger.info("开始放行......."+url);
+
             return chain.filter(exchange);
         }
 
+        boolean jwtInHeader = true;     // 标记jwt是否在请求头
+        //AppKeysConfig appKeysConfig=new AppKeysConfig();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.putAll(PropertiesListenerConfig.getAllProperty());
 
-        logger.info("token......."+token);
-        boolean jwtInHeader = true;// 标记jwt是否在请求头
+        //String mesg=appKeysConfig.getText();
+        logger.info("授权证书:"+map.get("app.keys.text"));
+
+        //进行签名
+
+        try {
+            if(null==map.get("app.keys.text")){
+                System.out.println("没有找到有效的证书文件");
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                // 响应空数据
+                return response.setComplete();
+            }
+            byte[] sign = new byte[0];
+            String mesg=map.get("app.keys.text").toString();
+            sign =map.get("app.keys.sign").toString().getBytes();
+            logger.info("签名内容；"+new String(sign));
+            boolean verify = VerifyTools.verify(mesg.getBytes(), sign, KeyTools.getPublicKeyFromCer(map));
+
+            if(!verify){
+                System.out.println("授权证书过期或者非法，请联系技术服务商");
+                // 设置401状态码，提示用户没有权限，用户收到该提示后需要重定向到登陆页面
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                // 响应空数据
+
+                return response.setComplete();
+
+            }
+        } catch (Exception e) {
+
+            logger.error("证书校验异常："+e.getMessage());
+            e.printStackTrace();
+        }
 
         if(StringUtils.isEmpty(token)){
             jwtInHeader = false;
@@ -90,7 +129,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
         }
 
         if(StringUtils.isEmpty(token)){
-            logger.info("token 为空");
+
             // 设置401状态码，提示用户没有权限，用户收到该提示后需要重定向到登陆页面
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             // 响应空数据
@@ -100,11 +139,10 @@ public class TokenFilter implements GlobalFilter, Ordered {
         }
         // 有令牌
         try {
-            logger.info("开始验证token是否正确");
+
             Claims claims=JwtTokenUtil.parseJWT(token);
-            logger.info("claims========"+claims);
+
             String id=claims.getId();
-            logger.info("权限中是否包含菜单======="+ claims.getSubject().contains(url));
 
              //检查token是否过期
 
@@ -124,7 +162,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
                 }
 
         } catch (Exception e) {
-            logger.info("验证token异常"+e.getMessage());
+            logger.error("验证token异常"+e.getMessage());
             // 无效令牌
             // 设置401状态码，提示用户没有权限，用户收到该提示后需要重定向到登陆页面
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
