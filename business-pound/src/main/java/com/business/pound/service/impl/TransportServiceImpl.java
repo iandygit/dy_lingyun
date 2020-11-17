@@ -135,12 +135,13 @@ public class TransportServiceImpl implements TransportService {
                  transportEnetity.setTareWeight(poundEntity.getTareWeight());//皮重
                  transportEnetity.setNetWeight(poundEntity.getWeight()-poundEntity.getTareWeight());//净重
              }else {
-                  if(null!=poundEntity.getWeight()){
+                  if(null!=poundEntity.getWeight()){//毛重
                       weight=poundEntity.getWeight();
                   }
-                   if(null != poundEntity.getTareWeight()){
+                   if(null != poundEntity.getTareWeight()){//皮重
                        tareWeight=poundEntity.getTareWeight();
                    }
+
                   if(i>0){//第二条数据
                       /******
                        * 如果两个磅单分别提供了毛重和皮重，则分别存入运单的毛重和皮重字段，
@@ -151,19 +152,19 @@ public class TransportServiceImpl implements TransportService {
                        * *********/
                       if(weight>poundEntity.getWeight()){
                           transportEnetity.setWeight(weight);//毛重
-                          transportEnetity.setTareWeight(poundEntity.getWeight());//皮重
-                          transportEnetity.setNetWeight(weight-poundEntity.getWeight());
-                      }else if (weight==poundEntity.getWeight()){
-                          transportEnetity.setWeight(poundEntity.getWeight());//毛重
-                          transportEnetity.setTareWeight(poundEntity.getTareWeight());//皮重
-                          transportEnetity.setNetWeight(poundEntity.getWeight()-poundEntity.getTareWeight());//净重
 
-                      }else{
+                      }else {
                           transportEnetity.setWeight(poundEntity.getWeight());//毛重
-                          transportEnetity.setWeight(weight);//皮重
-                          transportEnetity.setNetWeight(poundEntity.getWeight()-weight);//净重
+
                       }
 
+                      if(tareWeight>poundEntity.getTareWeight()){
+                          transportEnetity.setTareWeight(tareWeight);//皮重
+                      } {
+                          transportEnetity.setTareWeight(poundEntity.getTareWeight());
+                      }
+
+                      transportEnetity.setNetWeight(transportEnetity.getWeight()-transportEnetity.getTareWeight());//净重
                   }
              }
              transportEnetity.setPoundAccount(poundEntity.getPoundAccount());
