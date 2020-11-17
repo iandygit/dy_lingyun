@@ -159,12 +159,24 @@ public class TransportServiceImpl implements TransportService {
 
                       }
 
+                      //判断皮重大小
                       if(tareWeight>poundEntity.getTareWeight()){
+
                           transportEnetity.setTareWeight(tareWeight);//皮重
                       } else {
-                          transportEnetity.setTareWeight(poundEntity.getTareWeight());
-                      }
 
+                          transportEnetity.setTareWeight(poundEntity.getTareWeight());
+
+                      }
+                      //如果磅单中皮重数据为0，开始比较毛重大小，小的作为皮重，大的当作毛重
+                      if(transportEnetity.getTareWeight()==0){
+                          if(weight>poundEntity.getWeight()){
+                              transportEnetity.setTareWeight(poundEntity.getWeight());
+                          }else {
+                              transportEnetity.setTareWeight(weight);
+                          }
+
+                      }
                       transportEnetity.setNetWeight(transportEnetity.getWeight()-transportEnetity.getTareWeight());//净重
                   }
              }
