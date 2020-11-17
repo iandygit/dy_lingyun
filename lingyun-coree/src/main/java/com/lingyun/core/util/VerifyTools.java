@@ -20,4 +20,8 @@ public class VerifyTools {
         return signature.verify(Base64.getDecoder().decode(signMessage));
     }
 
+    public static void main(String args[]){
+       System.out.println("-----------");
+    }
+
 }
