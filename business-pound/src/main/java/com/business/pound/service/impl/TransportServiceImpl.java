@@ -160,7 +160,7 @@ public class TransportServiceImpl implements TransportService {
 
                       if(tareWeight>poundEntity.getTareWeight()){
                           transportEnetity.setTareWeight(tareWeight);//皮重
-                      } {
+                      } else {
                           transportEnetity.setTareWeight(poundEntity.getTareWeight());
                       }
 
