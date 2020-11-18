@@ -53,7 +53,6 @@ public class TokenFilter implements GlobalFilter, Ordered {
         //从请求头中取得token
         String token = request.getHeaders().getFirst("Authorization");
 
-        logger.info("开始权限过滤......."+url);
         String uuid = request.getHeaders().getFirst("uuid");
         if(StringUtils.isNotBlank(uuid) && uuid.contains("mecl_")){
             String key=request.getHeaders().getFirst("ApiKey");
@@ -83,8 +82,6 @@ public class TokenFilter implements GlobalFilter, Ordered {
         Map<String, Object> map = new HashMap<String, Object>();
         map.putAll(PropertiesListenerConfig.getAllProperty());
 
-        //String mesg=appKeysConfig.getText();
-        logger.info("授权证书:"+map.get("app.keys.text"));
 
         //进行签名
 
@@ -98,7 +95,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
             byte[] sign = new byte[0];
             String mesg=map.get("app.keys.text").toString();
             sign =map.get("app.keys.sign").toString().getBytes();
-            logger.info("签名内容；"+new String(sign));
+
             boolean verify = VerifyTools.verify(mesg.getBytes(), sign, KeyTools.getPublicKeyFromCer(map));
 
             if(!verify){
@@ -111,9 +108,12 @@ public class TokenFilter implements GlobalFilter, Ordered {
 
             }
         } catch (Exception e) {
+            System.out.println("授权证书过期或者非法，请联系技术服务商");
+            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+            // 响应空数据
 
-            logger.error("证书校验异常："+e.getMessage());
-            e.printStackTrace();
+            return response.setComplete();
+
         }
 
         if(StringUtils.isEmpty(token)){
@@ -151,7 +151,6 @@ public class TokenFilter implements GlobalFilter, Ordered {
                 Date dateNow=new Date();
 
 
-                logger.info("token过期时间==="+sd.format(date)+"---当前时间="+sd.format(dateNow));
 
                 if(date.before(dateNow)){//过期
 
@@ -168,7 +167,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
             // 响应空数据
             return response.setComplete();
         }
-        logger.info("token验证通过");
+
         // 令牌正常解析，为了方便在其他微服务进行认证，这里将jwt放入到请求头中
         request.mutate().header("Authorization", token);
 
