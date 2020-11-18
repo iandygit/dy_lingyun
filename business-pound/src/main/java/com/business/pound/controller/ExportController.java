@@ -13,6 +13,8 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +48,7 @@ public class ExportController {
     public ResponseEntity<String>  exportPound(String poundAccount,  HttpServletResponse response){
         List<PoundEntity> poundEntities=null;
         if(StringUtils.isEmpty(poundAccount)){
-             poundEntities= poundService.getAll();
+             poundEntities= poundService.findAllByIsEnabled(PoundEnum.Y);
         }else {
 
             poundEntities=poundService.findAllByPoundAccount(poundAccount);
@@ -53,7 +56,7 @@ public class ExportController {
 
 
 
-        String cloumns[]=new String []{"磅房号","磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","磅单状态"};
+        String cloumns[]=new String []{"磅房号","磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","创建日期"};
 
         if(poundEntities.size()==0){
             return null;
@@ -76,7 +79,7 @@ public class ExportController {
             result[7]=String.valueOf(poundEntity.getTareWeight());//皮重
             result[8]=String.valueOf(poundEntity.getNetWeight());//净重
             result[9]=poundEntity.getFlowTo().getDesc();//货物流向
-            result[10]= poundEntity.getPoundStatus().getDesc();
+            result[10]=poundEntity.getCreateTime();
             //result[10]=poundEntity.getPoundAccount();//磅房号
             list.add(result);
         }

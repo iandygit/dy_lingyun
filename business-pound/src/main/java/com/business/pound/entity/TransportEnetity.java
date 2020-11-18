@@ -2,6 +2,7 @@ package com.business.pound.entity;
 
 import com.business.pound.util.PoundEnum;
 import com.business.pound.util.TransportEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -77,6 +78,7 @@ public class TransportEnetity {
      */
     @Column(name = "create_time", insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME,pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
     @ApiModelProperty("创建时间")
     private Date createTime;
 

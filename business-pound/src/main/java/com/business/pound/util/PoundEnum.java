@@ -16,7 +16,9 @@ public enum PoundEnum implements PersistEnum2DB<String> {
     SALES("S","销售过磅"),
     REFLUSH("P","采购过磅"),
     INNER("N","内部周转"),
-    OTHRE("T","其他过磅");
+    OTHRE("T","其他过磅"),
+    Y("Y","正常"),
+    N("D","删除");
 
 
     private String desc;

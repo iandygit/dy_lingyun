@@ -1,6 +1,7 @@
 package com.business.pound.entity;
 
 import com.business.pound.util.PoundEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -10,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -94,13 +96,18 @@ public class PoundEntity implements Serializable {
      * 创建时间 yyyy-MM-dd HH:mm:ss
      */
     @Column(name = "create_time", insertable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME,pattern = "yyyy-MM-dd HH:mm:ss")
+    //@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME,pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss")
     @CreatedDate
     private String createTime;
 
     @Convert(converter = PoundEnum.Converter.class)
-    @ApiModelProperty("审批通过/未通过/未审批")
-    private PoundEnum poundStatus=PoundEnum.APPORVAL_W;;
+    @ApiModelProperty("APPORVAL_A（审批通过）/APPORVAL_B(未通过)/APPORVAL_A(未审批)")
+    private PoundEnum poundStatus=PoundEnum.APPORVAL_W;
+
+    @Convert(converter = PoundEnum.Converter.class)
+    @ApiModelProperty("Y/正常 D/删除")
+    private PoundEnum isEnabled=PoundEnum.Y;
 
 
 }

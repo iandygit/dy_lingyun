@@ -12,12 +12,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @RestController
@@ -37,12 +46,12 @@ public class PoundController {
     @ApiOperation(value = "磅单数据列表", notes = "支持按照名称查询，状态查询", tags = "磅单管理")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "poundAccount",value = "磅房号"),
-            @ApiImplicitParam(name = "poundStatus",value = "磅单状态",dataType = "String", paramType = "query",
-                    allowableValues = "APPORVAL_W,APPORVAL_A,APPORVAL_B", allowMultiple = false),
+            @ApiImplicitParam(name = "startTime",value = "查询开始日期"),
+            @ApiImplicitParam(name = "endTime",value = "查询开始日期"),
             @ApiImplicitParam(name = "pageNum",value = "当前页数，不传递默认是1"),
             @ApiImplicitParam(name = "pageSize",value = "每页显示大小，不传递默认是20")
     })
-    public ResponseEntity<Page<PoundEntity>> all(String poundAccount,String poundStatus,Integer pageNum,Integer pageSize){
+    public ResponseEntity<Page<PoundEntity>> all(String poundAccount,String startTime,String endTime,Integer pageNum,Integer pageSize){
         if(null==pageNum || pageNum==0){
             pageNum=0;
         }else {
@@ -53,29 +62,40 @@ public class PoundController {
         }
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         Pageable pageable= new PageRequest(pageNum,pageSize,sort);
-        PoundEntity entityExample=new PoundEntity();
-        ExampleMatcher matcher = ExampleMatcher.matching();
+
+        Specification specification = new Specification() {
+
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+                //增加筛选条件
+                Predicate predicate = cb.conjunction();
+                if(StringUtils.isNotBlank(poundAccount)){
+                    predicate.getExpressions().add(cb.equal(root.get("poundAccount"), poundAccount));
+                }
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+
+                 //起始日期
+                if (startTime != null && !startTime.trim().equals("")) {
+
+                    predicate.getExpressions().add(cb.greaterThanOrEqualTo(root.get("createTime").as(String.class),startTime ));
+                }
+                  //结束日期
+                if (endTime != null && !endTime.trim().equals("")) {
+                    Calendar calendar = new GregorianCalendar();
+                    calendar.setTime(format.parse(endTime));
+                    calendar.add(calendar.DATE,1); //把日期往后增加一天,整数  往后推,负数往前移动
+                    predicate.getExpressions().add(cb.lessThanOrEqualTo(root.get("createTime").as(String.class),format.format(calendar.getTime())));
+                }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                return predicate;
+            }
+        };
 
 
-
-        matcher.withMatcher("poundStatus",ExampleMatcher.GenericPropertyMatchers.contains());
-        if(StringUtils.isNoneEmpty(poundStatus)){
-            String poundStatusCode=PoundEnum.valueOf(poundStatus).getCode();
-            logger.info("状态参数："+poundStatusCode);
-            entityExample.setPoundStatus(PoundEnum.valueOf(poundStatus));//未审批状态的数据
-
-        }else {
-            entityExample.setPoundStatus(PoundEnum.APPORVAL_W);//未审批状态的数据
-
-        }
-
-        if(StringUtils.isNoneEmpty(poundAccount)){
-            matcher.withMatcher("poundAccount",ExampleMatcher.GenericPropertyMatchers.contains());
-            entityExample.setPoundAccount(poundAccount);
-        }
-
-        Example<PoundEntity> example = Example.of(entityExample ,matcher);
-        Page<PoundEntity> list= poundService.getPage(example,pageable);
+        Page<PoundEntity> list= poundService.findAll(specification, pageable);
 
         return ResponseEntity.ok(list);
     }
@@ -91,5 +111,16 @@ public class PoundController {
          poundService.save(poundEntity);
 
         return ResponseEntity.ok("操作成功");
+    }
+    @RequestMapping( method = RequestMethod.DELETE)
+    @ApiOperation(value = "删除磅单信息", notes = "删除操作操作", tags = "磅单管理")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "poundAccount",value = "磅房号"),
+            @ApiImplicitParam(name = "poundNum",value = "磅单号"),
+            @ApiImplicitParam(name = "poundId",value = "磅单id")
+    })
+    public  ResponseEntity<String> deletePound(Long poundId,String poundNum,String poundAccount){
+
+       return poundService.deleteByIdNumAccount(poundId,poundNum,poundAccount);
     }
 }

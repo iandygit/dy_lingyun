@@ -48,7 +48,7 @@ public class StatisAnalysisController {
         List<String> colums=new ArrayList<>();
         for (Object[] objects:mapList){
             if(null==objects[0]){
-                values.add(Double.valueOf(-1L));
+                values.add(Double.valueOf(0));
             }else {
                 values.add(Double.valueOf(objects[0].toString()));
             }
