@@ -53,31 +53,7 @@ public class TokenFilter implements GlobalFilter, Ordered {
         //从请求头中取得token
         String token = request.getHeaders().getFirst("Authorization");
 
-        String uuid = request.getHeaders().getFirst("uuid");
-        if(StringUtils.isNotBlank(uuid) && uuid.contains("mecl_")){
-            String key=request.getHeaders().getFirst("ApiKey");
-            ResponseEntity responseEntity=feignService.checkApiKeys(uuid,key);
-            log.info("HttpStatus==="+responseEntity.getStatusCode());
 
-           if(responseEntity.getStatusCode()==HttpStatus.UNAUTHORIZED){
-               // 设置401状态码，提示用户没有权限，用户收到该提示后需要重定向到登陆页面
-               response.setStatusCode(HttpStatus.UNAUTHORIZED);
-               return response.setComplete();
-           }else {
-               // 令牌正常解析，为了方便在其他微服务进行认证，这里将jwt放入到请求头中
-               request.mutate().header("Authorization", token);
-
-               // 放行
-               return chain.filter(exchange);
-           }
-        }
-        //跳过不需要验证的路径
-        if(null != skipAuthUrls&& Arrays.asList(skipAuthUrls).contains(url)){
-
-            return chain.filter(exchange);
-        }
-
-        boolean jwtInHeader = true;     // 标记jwt是否在请求头
         //AppKeysConfig appKeysConfig=new AppKeysConfig();
         Map<String, Object> map = new HashMap<String, Object>();
         map.putAll(PropertiesListenerConfig.getAllProperty());
@@ -115,6 +91,33 @@ public class TokenFilter implements GlobalFilter, Ordered {
             return response.setComplete();
 
         }
+
+        String uuid = request.getHeaders().getFirst("uuid");
+        if(StringUtils.isNotBlank(uuid) && uuid.contains("mecl_")){
+            String key=request.getHeaders().getFirst("ApiKey");
+            ResponseEntity responseEntity=feignService.checkApiKeys(uuid,key);
+            log.info("HttpStatus==="+responseEntity.getStatusCode());
+
+           if(responseEntity.getStatusCode()==HttpStatus.UNAUTHORIZED){
+               // 设置401状态码，提示用户没有权限，用户收到该提示后需要重定向到登陆页面
+               response.setStatusCode(HttpStatus.UNAUTHORIZED);
+               return response.setComplete();
+           }else {
+               // 令牌正常解析，为了方便在其他微服务进行认证，这里将jwt放入到请求头中
+               request.mutate().header("Authorization", token);
+
+               // 放行
+               return chain.filter(exchange);
+           }
+        }
+        //跳过不需要验证的路径
+        if(null != skipAuthUrls&& Arrays.asList(skipAuthUrls).contains(url)){
+
+            return chain.filter(exchange);
+        }
+
+        boolean jwtInHeader = true;     // 标记jwt是否在请求头
+
 
         if(StringUtils.isEmpty(token)){
             jwtInHeader = false;
