@@ -15,6 +15,7 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpCookie;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -48,8 +49,11 @@ public class TokenFilter implements GlobalFilter, Ordered {
         ServerHttpResponse response = exchange.getResponse();
         //response.getHeaders().add("Content-Type", "application/json;charset=UTF-8");
         response.getHeaders().add("characterEncoding","utf-8");
+        HttpMethod metohd=request.getMethod();
+
         // 获取当前请求路径
         String url = request.getURI().getPath();
+
         //从请求头中取得token
         String token = request.getHeaders().getFirst("Authorization");
 
@@ -59,38 +63,6 @@ public class TokenFilter implements GlobalFilter, Ordered {
         map.putAll(PropertiesListenerConfig.getAllProperty());
 
 
-        //进行签名
-
-        try {
-            if(null==map.get("app.keys.text")){
-                System.out.println("没有找到有效的证书文件");
-                response.setStatusCode(HttpStatus.UNAUTHORIZED);
-                // 响应空数据
-                return response.setComplete();
-            }
-            byte[] sign = new byte[0];
-            String mesg=map.get("app.keys.text").toString();
-            sign =map.get("app.keys.sign").toString().getBytes();
-
-            boolean verify = VerifyTools.verify(mesg.getBytes(), sign, KeyTools.getPublicKeyFromCer(map));
-
-            if(!verify){
-                System.out.println("授权证书过期或者非法，请联系技术服务商");
-                // 设置401状态码，提示用户没有权限，用户收到该提示后需要重定向到登陆页面
-                response.setStatusCode(HttpStatus.UNAUTHORIZED);
-                // 响应空数据
-
-                return response.setComplete();
-
-            }
-        } catch (Exception e) {
-            System.out.println("授权证书过期或者非法，请联系技术服务商");
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            // 响应空数据
-
-            return response.setComplete();
-
-        }
 
         String uuid = request.getHeaders().getFirst("uuid");
         if(StringUtils.isNotBlank(uuid) && uuid.contains("mecl_")){
@@ -110,6 +82,42 @@ public class TokenFilter implements GlobalFilter, Ordered {
                return chain.filter(exchange);
            }
         }
+
+        //进行签名
+        if((url.equals("/API-POUND/pound") && (metohd.matches("GET")) || metohd.matches("DELETE"))|| url.contains("/API-MEMBER/user")){
+            try {
+                if(null==map.get("app.keys.text")){
+                    System.out.println("没有找到有效的证书文件");
+                    response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                    // 响应空数据
+                    return response.setComplete();
+                }
+                byte[] sign = new byte[0];
+                String mesg=map.get("app.keys.text").toString();
+                sign =map.get("app.keys.sign").toString().getBytes();
+
+                boolean verify = VerifyTools.verify(mesg.getBytes(), sign, KeyTools.getPublicKeyFromCer(map));
+
+                if(!verify){
+                    System.out.println("授权证书过期或者非法，请联系技术服务商");
+                    // 设置401状态码，提示用户没有权限，用户收到该提示后需要重定向到登陆页面
+                    response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                    // 响应空数据
+
+                    return response.setComplete();
+
+                }
+            } catch (Exception e) {
+                System.out.println("授权证书过期或者非法，请联系技术服务商");
+                response.setStatusCode(HttpStatus.UNAUTHORIZED);
+                // 响应空数据
+
+                return response.setComplete();
+
+            }
+        }
+
+
         //跳过不需要验证的路径
         if(null != skipAuthUrls&& Arrays.asList(skipAuthUrls).contains(url)){
 
