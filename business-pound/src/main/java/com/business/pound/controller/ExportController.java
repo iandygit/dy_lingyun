@@ -45,18 +45,21 @@ public class ExportController {
 
     @GetMapping("pound")
     @ApiOperation(value = "磅单记录导出",tags = "导出管理")
-    public ResponseEntity<String>  exportPound(String poundAccount,  HttpServletResponse response){
-        List<PoundEntity> poundEntities=null;
-        if(StringUtils.isEmpty(poundAccount)){
-             poundEntities= poundService.findAllByIsEnabled(PoundEnum.Y);
-        }else {
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "poundAccount",value = "磅房号"),
+            @ApiImplicitParam(name = "startTime",value = "查询开始日期"),
+            @ApiImplicitParam(name = "endTime",value = "结束开始日期"),
+            @ApiImplicitParam(name = "pageNum",value = "当前页数，不传递默认是1"),
+            @ApiImplicitParam(name = "pageSize",value = "每页显示大小，不传递默认是20")
+    })
+    public ResponseEntity<String>  exportPound(String poundAccount,String startTime,String endTime, HttpServletResponse response){
 
-            poundEntities=poundService.findAllByPoundAccount(poundAccount);
-        }
 
 
+       List<PoundEntity> poundEntities= poundService.getExportResult( poundAccount,  PoundEnum.Y,  startTime,  endTime);
 
-        String cloumns[]=new String []{"磅房号","磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","创建日期"};
+
+        String cloumns[]=new String []{"磅房号","磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","扣杂","扣率","实重","磅重","毛重时间","皮重时间","创建日期"};
 
         if(poundEntities.size()==0){
             return null;
@@ -78,8 +81,19 @@ public class ExportController {
             result[6]=String.valueOf(poundEntity.getWeight());//毛重
             result[7]=String.valueOf(poundEntity.getTareWeight());//皮重
             result[8]=String.valueOf(poundEntity.getNetWeight());//净重
-            result[9]=poundEntity.getFlowTo().getDesc();//货物流向
-            result[10]=poundEntity.getCreateTime();
+             if(null==poundEntity.getFlowTo()){
+                 result[9]="未知";
+             }else {
+
+                 result[9]=poundEntity.getFlowTo().getDesc();//货物流向
+             }
+            result[10]=String.valueOf(poundEntity.getDeductionWeight());//扣杂
+             result[11]=String.valueOf(poundEntity.getDeductionRate());//扣率
+             result[12]=String.valueOf(poundEntity.getActualWeight());//实重
+             result[12]=String.valueOf(poundEntity.getPoundWeight());//磅重
+             result[13]=String.valueOf(poundEntity.getWeightTime());//毛重时间
+             result[14]=String.valueOf(poundEntity.getTareWeightTime());//皮重时间
+            result[15]=poundEntity.getCreateTime();//创建时间
             //result[10]=poundEntity.getPoundAccount();//磅房号
             list.add(result);
         }
