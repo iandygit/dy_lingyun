@@ -101,41 +101,7 @@ public class PoundServiceImpl  implements PoundService {
     }
 
     @Override
-    public List<PoundEntity> getExportResult(String poundAccount, PoundEnum isEnable, String startTime, String endTime) {
-
-
-        Specification specification = new Specification(){
-
-            @Override
-            public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                //增加筛选条件
-                Predicate predicate = criteriaBuilder.conjunction();
-                predicate.getExpressions().add(criteriaBuilder.equal(root.get("isEnabled"), isEnable));
-
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-                if(StringUtils.isNotBlank(poundAccount)){
-                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("poundAccount"), poundAccount));
-                }
-                try {
-                    //起始日期
-                    if (startTime != null && !startTime.trim().equals("")) {
-
-                        predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.get("createTime").as(String.class),startTime ));
-                    }
-                    //结束日期
-                    if (endTime != null && !endTime.trim().equals("")) {
-                        Calendar calendar = new GregorianCalendar();
-                        calendar.setTime(format.parse(endTime));
-                        calendar.add(calendar.DATE,1); //把日期往后增加一天,整数  往后推,负数往前移动
-                        predicate.getExpressions().add(criteriaBuilder.lessThanOrEqualTo(root.get("createTime").as(String.class),format.format(calendar.getTime())));
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                return predicate;
-            }
-        };
+    public List<PoundEntity> getExportResult( Specification specification ) {
 
         List<PoundEntity> list= poundRepository.findAll(specification);
         return list;

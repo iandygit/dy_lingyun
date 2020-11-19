@@ -35,7 +35,7 @@ public interface PoundService extends  BaseService<PoundEntity> {
      * @param endTime
      * @return
      */
-    public List<PoundEntity>  getExportResult(String poundAccount,PoundEnum isEnable,String startTime,String endTime);
+    public List<PoundEntity>  getExportResult( Specification specification );
 
     /**
      * pound动态查询

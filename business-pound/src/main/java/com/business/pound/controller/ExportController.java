@@ -22,15 +22,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @RestController
@@ -55,8 +62,38 @@ public class ExportController {
     public ResponseEntity<String>  exportPound(String poundAccount,String startTime,String endTime, HttpServletResponse response){
 
 
+        Specification specification = new Specification() {
 
-       List<PoundEntity> poundEntities= poundService.getExportResult( poundAccount,  PoundEnum.Y,  startTime,  endTime);
+            public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
+                //增加筛选条件
+                Predicate predicate = cb.conjunction();
+                predicate.getExpressions().add(cb.equal(root.get("isEnabled"), PoundEnum.Y));
+                if(StringUtils.isNotBlank(poundAccount)){
+                    predicate.getExpressions().add(cb.equal(root.get("poundAccount"), poundAccount));
+                }
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                try {
+
+                    //起始日期
+                    if (startTime != null && !startTime.trim().equals("")) {
+
+                        predicate.getExpressions().add(cb.greaterThanOrEqualTo(root.get("createTime").as(String.class),startTime ));
+                    }
+                    //结束日期
+                    if (endTime != null && !endTime.trim().equals("")) {
+                        Calendar calendar = new GregorianCalendar();
+                        calendar.setTime(format.parse(endTime));
+                        calendar.add(calendar.DATE,1); //把日期往后增加一天,整数  往后推,负数往前移动
+                        predicate.getExpressions().add(cb.lessThanOrEqualTo(root.get("createTime").as(String.class),format.format(calendar.getTime())));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                return predicate;
+            }
+        };
+       List<PoundEntity> poundEntities= poundService.getExportResult(specification);
 
 
         String cloumns[]=new String []{"磅房号","磅单号","汽车号","货物名","收货单位","发货单位","毛重","皮重","净重","货物流向","扣杂","扣率","实重","磅重","毛重时间","皮重时间","创建日期"};
@@ -105,7 +142,7 @@ public class ExportController {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        return null;
+        return ResponseEntity.ok("下载完成");
     }
     @GetMapping("transport")
     @ApiOperation(value = "运单记录导出",tags = "导出管理")
