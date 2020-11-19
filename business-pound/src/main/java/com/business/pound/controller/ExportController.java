@@ -90,10 +90,10 @@ public class ExportController {
             result[10]=String.valueOf(poundEntity.getDeductionWeight());//扣杂
              result[11]=String.valueOf(poundEntity.getDeductionRate());//扣率
              result[12]=String.valueOf(poundEntity.getActualWeight());//实重
-             result[12]=String.valueOf(poundEntity.getPoundWeight());//磅重
-             result[13]=String.valueOf(poundEntity.getWeightTime());//毛重时间
-             result[14]=String.valueOf(poundEntity.getTareWeightTime());//皮重时间
-            result[15]=poundEntity.getCreateTime();//创建时间
+             result[13]=String.valueOf(poundEntity.getPoundWeight());//磅重
+             result[14]=String.valueOf(poundEntity.getWeightTime());//毛重时间
+             result[15]=String.valueOf(poundEntity.getTareWeightTime());//皮重时间
+            result[16]=poundEntity.getCreateTime();//创建时间
             //result[10]=poundEntity.getPoundAccount();//磅房号
             list.add(result);
         }
