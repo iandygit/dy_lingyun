@@ -47,7 +47,7 @@ public class PoundController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "poundAccount",value = "磅房号"),
             @ApiImplicitParam(name = "startTime",value = "查询开始日期"),
-            @ApiImplicitParam(name = "endTime",value = "查询开始日期"),
+            @ApiImplicitParam(name = "endTime",value = "结束开始日期"),
             @ApiImplicitParam(name = "pageNum",value = "当前页数，不传递默认是1"),
             @ApiImplicitParam(name = "pageSize",value = "每页显示大小，不传递默认是20")
     })
