@@ -79,4 +79,7 @@ public interface PoundRepository extends JpaRepository<PoundEntity,Long> {
     public List<PoundEntity> findAllByIsEnabled(PoundEnum isEnable);
 
     public  Page<PoundEntity> findAll(Specification specification, Pageable pageRequest);
+
+
+    public List<PoundEntity> findAll(Specification specification);
 }

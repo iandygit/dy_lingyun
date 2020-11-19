@@ -1,18 +1,14 @@
 package com.business.pound.service;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.business.pound.entity.PoundEntity;
 import com.business.pound.util.PoundEnum;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Map;
-
 public interface PoundService extends  BaseService<PoundEntity> {
 
 
@@ -30,6 +26,16 @@ public interface PoundService extends  BaseService<PoundEntity> {
     public ResponseEntity<String> deleteByIdNumAccount(Long id,String num,String account);
 
     public List<PoundEntity> findAllByIsEnabled(PoundEnum isEnable);
+
+    /**
+     * 磅单导出升级，增加时间查询
+     * @param poundAccount
+     * @param isEnable
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public List<PoundEntity>  getExportResult(String poundAccount,PoundEnum isEnable,String startTime,String endTime);
 
     /**
      * pound动态查询

@@ -4,16 +4,23 @@ import com.business.pound.entity.PoundEntity;
 import com.business.pound.repository.PoundRepository;
 import com.business.pound.service.PoundService;
 import com.business.pound.util.PoundEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,6 +98,47 @@ public class PoundServiceImpl  implements PoundService {
     public List<PoundEntity> findAllByIsEnabled(PoundEnum isEnable) {
 
         return poundRepository.findAllByIsEnabled(isEnable);
+    }
+
+    @Override
+    public List<PoundEntity> getExportResult(String poundAccount, PoundEnum isEnable, String startTime, String endTime) {
+
+
+        Specification specification = new Specification(){
+
+            @Override
+            public Predicate toPredicate(Root root, CriteriaQuery criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                //增加筛选条件
+                Predicate predicate = criteriaBuilder.conjunction();
+                predicate.getExpressions().add(criteriaBuilder.equal(root.get("isEnabled"), isEnable));
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+                if(StringUtils.isNotBlank(poundAccount)){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("poundAccount"), poundAccount));
+                }
+                try {
+                    //起始日期
+                    if (startTime != null && !startTime.trim().equals("")) {
+
+                        predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.get("createTime").as(String.class),startTime ));
+                    }
+                    //结束日期
+                    if (endTime != null && !endTime.trim().equals("")) {
+                        Calendar calendar = new GregorianCalendar();
+                        calendar.setTime(format.parse(endTime));
+                        calendar.add(calendar.DATE,1); //把日期往后增加一天,整数  往后推,负数往前移动
+                        predicate.getExpressions().add(criteriaBuilder.lessThanOrEqualTo(root.get("createTime").as(String.class),format.format(calendar.getTime())));
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                return predicate;
+            }
+        };
+
+        List<PoundEntity> list= poundRepository.findAll(specification);
+        return list;
     }
 
     @Override

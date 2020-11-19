@@ -68,6 +68,7 @@ public class PoundController {
             public Predicate toPredicate(Root root, CriteriaQuery query, CriteriaBuilder cb) {
                 //增加筛选条件
                 Predicate predicate = cb.conjunction();
+                predicate.getExpressions().add(cb.equal(root.get("isEnabled"), PoundEnum.Y));
                 if(StringUtils.isNotBlank(poundAccount)){
                     predicate.getExpressions().add(cb.equal(root.get("poundAccount"), poundAccount));
                 }
